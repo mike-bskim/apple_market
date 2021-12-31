@@ -18,6 +18,14 @@ class AppleApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      theme: ThemeData(
+        primarySwatch: Colors.red,
+        // fontFamily: 'Dohyeon',
+        textTheme: const TextTheme(
+          headline3: TextStyle(fontFamily: 'Dohyeon'),
+          button: TextStyle(color: Colors.white),
+        )
+      ),
       routeInformationParser: BeamerParser(),
       routerDelegate: _routerDelegate,
     );

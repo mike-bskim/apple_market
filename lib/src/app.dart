@@ -7,7 +7,7 @@ final _routerDelegate = BeamerDelegate(
   guards: [BeamGuard(
     pathPatterns: ['/'],
     check: (context, location){return false;},
-    showPage: const BeamPage(child: AuthScreen()),
+    showPage: BeamPage(child: AuthScreen()),
   )],
   locationBuilder: BeamerLocationBuilder(beamLocations: [HomeLocation()])
 );
@@ -21,6 +21,7 @@ class AppleApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.red,
         // fontFamily: 'Dohyeon',
+        hintColor: Colors.grey[350],
         textTheme: const TextTheme(
           headline3: TextStyle(fontFamily: 'Dohyeon'),
           button: TextStyle(color: Colors.white),

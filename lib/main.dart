@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Object>(
-      future: Future.delayed(const Duration(seconds: 3), ()=>100),
+      future: Future.delayed(const Duration(seconds: 2), ()=>100),
       builder: (context, snapshot) {
         return AnimatedSwitcher(
           duration: const Duration(milliseconds: 500),

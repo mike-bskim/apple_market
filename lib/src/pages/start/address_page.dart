@@ -1,4 +1,5 @@
 import 'package:apple_market/src/utils/logger.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -13,8 +14,9 @@ class AddressPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      minimum: const EdgeInsets.all(16),
+      minimum: const EdgeInsets.only(left: 16, right: 16),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           TextFormField(
             decoration: InputDecoration(
@@ -26,21 +28,30 @@ class AddressPage extends StatelessWidget {
               hintStyle: TextStyle(color: Theme.of(context).hintColor),
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: TextButton.icon(
-                  icon: const Icon(CupertinoIcons.compass, color: Colors.white, size: 20,),
-                  onPressed: onButtonClick,
-                  label: Text('현재위치 찾기',
-                    style: Theme.of(context).textTheme.button,
-                  ),
-                  style: TextButton.styleFrom(backgroundColor: Theme.of(context).primaryColor),
-                ),
-              ),
-            ],
+          TextButton.icon(
+            icon: const Icon(CupertinoIcons.compass, color: Colors.white, size: 20,),
+            onPressed: onButtonClick,
+            label: Text('현재위치 찾기',
+              style: Theme.of(context).textTheme.button,
+            ),
+            style: TextButton.styleFrom(
+              backgroundColor: Theme.of(context).primaryColor,
+              minimumSize: const Size(10, 48),
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              padding: EdgeInsets.symmetric(vertical: 16),
+              // shrinkWrap: true,
+              itemCount: 20,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading: ExtendedImage.asset('assets/imgs/apple.png'),
+                  title: Text('title $index'),
+                  subtitle:  Text('subtitle $index'),
+                );
+              },
+            ),
           ),
         ],
       ),

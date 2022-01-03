@@ -1,3 +1,4 @@
+import 'package:apple_market/src/constants/common_size.dart';
 import 'package:apple_market/src/utils/logger.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class IntroPage extends StatelessWidget {
 
         return SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: padding_16),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
@@ -53,25 +54,25 @@ class IntroPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                const Text('우리 동네 중고 직거래 사과마켓',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                Text('우리 동네 중고 직거래 사과마켓',
+                  style: Theme.of(context).textTheme.headline6,
                 ),
-                const Text(
+                Text(
                   '사과 마켓은 동네 직거래 마켓이에요\n'
-                      '내 동네를 설정하고 시작해보세요',
-                  style: TextStyle(fontSize: 16,),
+                  '내 동네를 설정하고 시작해보세요',
+                  style: Theme.of(context).textTheme.subtitle1,
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.symmetric(horizontal: padding_16),
                       child: TextButton(
                         onPressed: onButtonClick,
                         child: Text('내 동네 설정하고 시작하기',
                           style: Theme.of(context).textTheme.button,
                         ),
-                        style: TextButton.styleFrom(backgroundColor: Theme.of(context).primaryColor),
+                        // style: TextButton.styleFrom(backgroundColor: Theme.of(context).primaryColor),
                       ),
                     ),
                   ],

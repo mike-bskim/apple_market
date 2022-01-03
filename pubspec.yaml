@@ -37,6 +37,7 @@ dependencies:
   extended_image: ^6.0.1
   logger: ^1.1.0
   beamer: ^1.1.0
+  flutter_multi_formatter: ^2.5.1
 
 dev_dependencies:
   flutter_test:

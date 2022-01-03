@@ -1,9 +1,10 @@
 import 'package:apple_market/src/pages/start/address_page.dart';
+import 'package:apple_market/src/pages/start/auth_page.dart';
 import 'package:apple_market/src/pages/start/intro_page.dart';
 import 'package:flutter/material.dart';
 
-class AuthScreen extends StatelessWidget {
-  AuthScreen({Key? key}) : super(key: key);
+class StartScreen extends StatelessWidget {
+  StartScreen({Key? key}) : super(key: key);
 
   final PageController _pageController = PageController();
 
@@ -11,14 +12,12 @@ class AuthScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageView(
-        physics: const NeverScrollableScrollPhysics(), // 사용자가 스크롤하지 못하게 설정
+        // physics: const NeverScrollableScrollPhysics(), // 사용자가 스크롤하지 못하게 설정
         controller: _pageController,
         children: <Widget>[
           IntroPage(_pageController),
           const AddressPage(),
-          Container(
-            color: Colors.accents[5],
-          ),
+          AuthPage(),
         ],
       ),
     );

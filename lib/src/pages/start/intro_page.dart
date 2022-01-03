@@ -14,6 +14,7 @@ class IntroPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // FocusScope.of(context).unfocus();
     return LayoutBuilder(
       builder: (context, constraints){
         Size size = MediaQuery.of(context).size;

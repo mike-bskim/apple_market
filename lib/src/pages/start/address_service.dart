@@ -13,7 +13,7 @@ class AddressService {
   // }
 
   // string -> json(이부분은 fltter에서 자동처리함) -> object
-  void searchAddressByStr(String text) async {
+  Future<AddressModel> searchAddressByStr(String text) async {
 
     final formData = {
       'key':vWorldKey,
@@ -31,7 +31,9 @@ class AddressService {
     logger.d('resp: [$resp]');
     logger.d('resp.data is Map: [${resp.data is Map}]');
 
-    AddressModel addressService = AddressModel.fromJson(resp.data['response']);
-    logger.d('addressService: [$addressService]');
+    AddressModel addressModel = AddressModel.fromJson(resp.data['response']);
+    logger.d('addressService: [$addressModel]');
+
+    return addressModel;
   }
 }

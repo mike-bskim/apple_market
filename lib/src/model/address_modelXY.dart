@@ -2,9 +2,7 @@
 /// result : [{"zipcode":"","type":"parcel","text":"경기도 시흥시 정왕동 1946","structure":{"level0":"대한민국","level1":"경기도","level2":"시흥시","level3":"","level4L":"정왕동","level4LC":"4139013200","level4A":"","level4AC":"","level5":"1946공","detail":""}}]
 
 class AddressModelXY {
-  AddressModelXY({
-      Input? input, 
-      List<Result>? result,}){
+  AddressModelXY({Input? input, List<Result>? result,}){
     _input = input;
     _result = result;
 }

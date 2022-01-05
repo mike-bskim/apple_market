@@ -19,7 +19,7 @@ class _AddressPageState extends State<AddressPage> {
   final TextEditingController _addressController = TextEditingController();
 
   AddressModel? _addressModel;
-  final List<AddressModelXY> _addressModelXYs = [];
+  final List<AddressModelXY> _addressModelXYList = [];
   bool _isGettingLocation = false;
 
   @override
@@ -33,10 +33,7 @@ class _AddressPageState extends State<AddressPage> {
         children: <Widget>[
           TextFormField(
             controller: _addressController,
-            onFieldSubmitted: (text) async {
-              _addressModel = await AddressService().searchAddressByStr(text);
-              setState(() {});
-            },
+            onFieldSubmitted: onClickTextField,
             decoration: InputDecoration(
               prefixIcon: const Icon(
                 Icons.search,
@@ -56,42 +53,72 @@ class _AddressPageState extends State<AddressPage> {
             ),
             onPressed: myLocation,
             icon: _isGettingLocation
-                ? const CircularProgressIndicator()
+                ? const SizedBox(
+                    child: CircularProgressIndicator(color: Colors.white),
+                    height: 20,
+                    width: 20,
+                  )
                 : const Icon(
                     CupertinoIcons.compass,
                     color: Colors.white,
                     size: 20,
                   ),
           ),
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(vertical: padding_16),
-              // shrinkWrap: true,
-              itemCount: (_addressModel == null ||
+          if(_addressModel != null)
+            Expanded(
+              child: ListView.builder(
+                padding: const EdgeInsets.symmetric(vertical: padding_16),
+                // shrinkWrap: true,
+                itemCount: (_addressModel == null ||
+                        _addressModel!.result == null ||
+                        _addressModel!.result!.items == null)
+                    ? 0
+                    : _addressModel!.result!.items!.length,
+                itemBuilder: (context, index) {
+                  if (_addressModel == null ||
                       _addressModel!.result == null ||
-                      _addressModel!.result!.items == null)
-                  ? 0
-                  : _addressModel!.result!.items!.length,
-              itemBuilder: (context, index) {
-                if (_addressModel == null ||
-                    _addressModel!.result == null ||
-                    _addressModel!.result!.items == null ||
-                    _addressModel!.result!.items![index].address == null ||
-                    _addressModel!.result!.items![index].address!.parcel == null) {
-                  return Container();
-                }
-                return ListTile(
-                  leading: ExtendedImage.asset('assets/imgs/apple.png'),
-                  title: Text(_addressModel!.result!.items![index].address!.road!),
-                  subtitle: Text(_addressModel!.result!.items![index].address!.parcel!),
-                );
-              },
+                      _addressModel!.result!.items == null ||
+                      _addressModel!.result!.items![index].address == null ||
+                      _addressModel!.result!.items![index].address!.parcel == null) {
+                    return Container();
+                  }
+                  return ListTile(
+                    leading: ExtendedImage.asset('assets/imgs/apple.png'),
+                    title: Text(_addressModel!.result!.items![index].address!.road!),
+                    subtitle: Text(_addressModel!.result!.items![index].address!.parcel!),
+                  );
+                },
+              ),
             ),
-          ),
+          if(_addressModelXYList.isNotEmpty)
+            Expanded(
+              child: ListView.builder(
+                padding: const EdgeInsets.symmetric(vertical: padding_16),
+                // shrinkWrap: true,
+                itemCount: _addressModelXYList.length,
+                itemBuilder: (context, index) {
+                  if (_addressModelXYList[index].result == null ||
+                      _addressModelXYList[index].result!.isEmpty) {
+                    return Container();
+                  }
+                  return ListTile(
+                    leading: ExtendedImage.asset('assets/imgs/apple.png'),
+                    title: Text(_addressModelXYList[index].result![0].text ?? ''),
+                    subtitle: Text(_addressModelXYList[index].result![0].zipcode ?? ''),
+                  );
+                },
+              ),
+            ),
         ],
       ),
     );
   }
+
+  void onClickTextField(text) async {
+            _addressModelXYList.clear();
+            _addressModel = await AddressService().searchAddressByStr(text);
+            setState(() {});
+          }
 
   void onClickSearchAddress() async {
     final text = _addressController.text;
@@ -105,8 +132,8 @@ class _AddressPageState extends State<AddressPage> {
   }
 
   void myLocation() async {
-
     _addressModel = null;
+    _addressModelXYList.clear();
 
     setState(() {
       _isGettingLocation = true;
@@ -139,7 +166,7 @@ class _AddressPageState extends State<AddressPage> {
         // log: _locationData.longitude!, lat: _locationData.latitude!);
         log: 126.71447360681148,
         lat: 37.36341055367434);
-    _addressModelXYs.addAll(_addressModelXY);
+    _addressModelXYList.addAll(_addressModelXY);
 
     setState(() {
       _isGettingLocation = false;

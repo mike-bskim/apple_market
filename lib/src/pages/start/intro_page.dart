@@ -1,20 +1,27 @@
 import 'package:apple_market/src/constants/common_size.dart';
+import 'package:apple_market/src/states/user_provider.dart';
 import 'package:apple_market/src/utils/logger.dart';
+import 'package:apple_market/src/pages/start/address_service.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 
 class IntroPage extends StatelessWidget {
   final PageController controller;
   const IntroPage(this.controller, {Key? key}) : super(key: key);
 
-  void onButtonClick(){
+  Future<void> onButtonClick() async {
     controller.animateToPage(1, duration: const Duration(milliseconds: 500), curve: Curves.ease);
     logger.d('on Text Button Clicked !!!');
   }
 
   @override
   Widget build(BuildContext context) {
-    // FocusScope.of(context).unfocus();
+    logger.d("IntroPage >> build");
+    logger.d('current user state: ${context.read<UserProvider>().userState }');
+    FocusScope.of(context).unfocus();
+
     return LayoutBuilder(
       builder: (context, constraints){
         Size size = MediaQuery.of(context).size;

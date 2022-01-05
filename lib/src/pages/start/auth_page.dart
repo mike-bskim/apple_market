@@ -1,11 +1,13 @@
 import 'package:apple_market/src/constants/common_size.dart';
+import 'package:apple_market/src/states/user_provider.dart';
 import 'package:apple_market/src/utils/logger.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
+import 'package:provider/provider.dart';
 
 class AuthPage extends StatefulWidget {
-  AuthPage({Key? key}) : super(key: key);
+  const AuthPage({Key? key}) : super(key: key);
 
   @override
   State<AuthPage> createState() => _AuthPageState();
@@ -29,6 +31,7 @@ class _AuthPageState extends State<AuthPage> {
 
   @override
   Widget build(BuildContext context) {
+    logger.d("AuthPage >> build");
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -128,7 +131,7 @@ class _AuthPageState extends State<AuthPage> {
                       child: TextButton(
                         onPressed: (){
                           FocusScope.of(context).unfocus();
-                          attemptVarify();
+                          attemptVarify(context);
                         },
                         child: _verificationStatus == VerificationStatus.verifying
                             ? const CircularProgressIndicator(color: Colors.white,)
@@ -167,7 +170,7 @@ class _AuthPageState extends State<AuthPage> {
     }
   }
 
-  void attemptVarify() async {
+  void attemptVarify(BuildContext context) async {
     setState(() {
       _verificationStatus = VerificationStatus.verifying;
     });
@@ -175,6 +178,8 @@ class _AuthPageState extends State<AuthPage> {
     setState(() {
       _verificationStatus = VerificationStatus.verificationDone;
     });
+
+    context.read<UserProvider>().setUserAuth(true);
   }
 
 }

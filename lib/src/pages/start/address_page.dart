@@ -7,13 +7,19 @@ import 'package:flutter/material.dart';
 class AddressPage extends StatelessWidget {
   const AddressPage({Key? key}) : super(key: key);
 
+  TextEditingController _addressController = TextEditingController();
+
   void onButtonClick(){
+    searchAddressByStr();
     logger.d('address_page >> on Text Button Clicked !!!');
   }
 
 
   @override
   Widget build(BuildContext context) {
+    logger.d("AddressPage >> build");
+    FocusScope.of(context).unfocus();
+
     return SafeArea(
       minimum: const EdgeInsets.only(left: padding_16, right: padding_16),
       child: Column(

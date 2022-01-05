@@ -40,6 +40,9 @@ dependencies:
   flutter_multi_formatter: ^2.5.1
   provider: ^6.0.2
   dio: ^4.0.4
+  location: ^4.3.0
+#  geolocator: ^8.0.1
+
 
 dev_dependencies:
   flutter_test:

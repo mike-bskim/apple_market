@@ -16,7 +16,7 @@ class StartScreen extends StatelessWidget {
         controller: _pageController,
         children: <Widget>[
           IntroPage(_pageController),
-          const AddressPage(),
+          AddressPage(),
           const AuthPage(),
         ],
       ),

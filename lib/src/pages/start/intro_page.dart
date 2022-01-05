@@ -1,7 +1,7 @@
 import 'package:apple_market/src/constants/common_size.dart';
 import 'package:apple_market/src/states/user_provider.dart';
 import 'package:apple_market/src/utils/logger.dart';
-import 'package:apple_market/src/pages/start/address_service.dart';
+// import 'package:apple_market/src/pages/start/address_service.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

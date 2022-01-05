@@ -1,16 +1,21 @@
 import 'package:apple_market/src/constants/common_size.dart';
 import 'package:apple_market/src/utils/logger.dart';
+import 'package:apple_market/src/pages/start/address_service.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AddressPage extends StatelessWidget {
-  const AddressPage({Key? key}) : super(key: key);
+  AddressPage({Key? key}) : super(key: key);
 
-  TextEditingController _addressController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
 
-  void onButtonClick(){
-    searchAddressByStr();
+  void onClickSearchAddress(){
+    final text = _addressController.text;
+    logger.d('text:' + text);
+    if (text.isNotEmpty) {
+      AddressService().searchAddressByStr(text);
+    }
     logger.d('address_page >> on Text Button Clicked !!!');
   }
 
@@ -18,7 +23,6 @@ class AddressPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     logger.d("AddressPage >> build");
-    FocusScope.of(context).unfocus();
 
     return SafeArea(
       minimum: const EdgeInsets.only(left: padding_16, right: padding_16),
@@ -26,6 +30,7 @@ class AddressPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           TextFormField(
+            controller: _addressController,
             decoration: InputDecoration(
               prefixIcon: const Icon(Icons.search, color: Colors.grey,),
               hintText: '도로명으로 검색',
@@ -36,8 +41,8 @@ class AddressPage extends StatelessWidget {
             ),
           ),
           TextButton.icon(
+            onPressed: onClickSearchAddress,
             icon: const Icon(CupertinoIcons.compass, color: Colors.white, size: 20,),
-            onPressed: onButtonClick,
             label: Text('현재위치 찾기',
               style: Theme.of(context).textTheme.button,
             ),

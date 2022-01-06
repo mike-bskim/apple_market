@@ -7,6 +7,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AddressPage extends StatefulWidget {
@@ -22,6 +23,12 @@ class _AddressPageState extends State<AddressPage> {
   AddressModel? _addressModel;
   final List<AddressModelXY> _addressModelXYList = [];
   bool _isGettingLocation = false;
+
+  @override
+  void dispose() {
+    _addressController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +72,7 @@ class _AddressPageState extends State<AddressPage> {
                     size: 20,
                   ),
           ),
-          if(_addressModel != null)
+          if (_addressModel != null)
             Expanded(
               child: ListView.builder(
                 padding: const EdgeInsets.symmetric(vertical: padding_16),
@@ -85,16 +92,16 @@ class _AddressPageState extends State<AddressPage> {
                   }
                   return ListTile(
                     onTap: () {
-                      _saveAddressOnSharedPreference(_addressModel!.result!.items![index].address!.road??'');
+                      _saveAddressAndGoToNextPage(_addressModel!.result!.items![index].address!.road ?? '');
                     },
                     leading: ExtendedImage.asset('assets/imgs/apple.png'),
-                    title: Text(_addressModel!.result!.items![index].address!.road??''),
-                    subtitle: Text(_addressModel!.result!.items![index].address!.parcel??''),
+                    title: Text(_addressModel!.result!.items![index].address!.road ?? ''),
+                    subtitle: Text(_addressModel!.result!.items![index].address!.parcel ?? ''),
                   );
                 },
               ),
             ),
-          if(_addressModelXYList.isNotEmpty)
+          if (_addressModelXYList.isNotEmpty)
             Expanded(
               child: ListView.builder(
                 padding: const EdgeInsets.symmetric(vertical: padding_16),
@@ -107,7 +114,7 @@ class _AddressPageState extends State<AddressPage> {
                   }
                   return ListTile(
                     onTap: () {
-                      _saveAddressOnSharedPreference(_addressModelXYList[index].result![0].text ?? '');
+                      _saveAddressAndGoToNextPage(_addressModelXYList[index].result![0].text ?? '');
                     },
                     leading: ExtendedImage.asset('assets/imgs/apple.png'),
                     title: Text(_addressModelXYList[index].result![0].text ?? ''),
@@ -119,6 +126,12 @@ class _AddressPageState extends State<AddressPage> {
         ],
       ),
     );
+  }
+
+  _saveAddressAndGoToNextPage(String address) async {
+    await _saveAddressOnSharedPreference(address);
+    context.read<PageController>().animateToPage(2,
+        duration: const Duration(milliseconds: 500), curve: Curves.ease);
   }
 
   _saveAddressOnSharedPreference(String address) async {

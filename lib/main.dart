@@ -4,9 +4,11 @@ import 'package:apple_market/src/app.dart';
 import 'package:apple_market/src/pages/splash_page.dart';
 import 'package:apple_market/src/utils/logger.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   logger.d('Starting MyApp()');
+  Provider.debugCheckInvalidValueType = null;
   runApp(const MyApp());
 }
 

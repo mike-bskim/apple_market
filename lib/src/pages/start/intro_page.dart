@@ -1,25 +1,25 @@
 import 'package:apple_market/src/constants/common_size.dart';
 import 'package:apple_market/src/states/user_provider.dart';
 import 'package:apple_market/src/utils/logger.dart';
-// import 'package:apple_market/src/pages/start/address_service.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 
 class IntroPage extends StatelessWidget {
-  final PageController controller;
-  const IntroPage(this.controller, {Key? key}) : super(key: key);
 
-  Future<void> onButtonClick() async {
-    controller.animateToPage(1, duration: const Duration(milliseconds: 500), curve: Curves.ease);
-    logger.d('on Text Button Clicked !!!');
+  const IntroPage({Key? key}) : super(key: key);
+
+  Future<void> _goToNextPage(context) async {
+    context.read<PageController>().animateToPage(1, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+    logger.d('on Intro page Button Clicked !!!');
   }
 
   @override
   Widget build(BuildContext context) {
     logger.d("IntroPage >> build");
     logger.d('current user state: ${context.read<UserProvider>().userState }');
+    var _orgContext = context;
     FocusScope.of(context).unfocus();
 
     return LayoutBuilder(
@@ -40,11 +40,6 @@ class IntroPage extends StatelessWidget {
                       .textTheme
                       .headline3!
                       .copyWith(color: Theme.of(context).colorScheme.primary),
-                  // style: TextStyle(
-                  //   fontSize: 30,
-                  //   color: Theme.of(context).colorScheme.primary,
-                  //   fontWeight: FontWeight.bold,
-                  //   ),
                 ),
                 SizedBox(
                   width: imgSize,
@@ -76,7 +71,9 @@ class IntroPage extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: padding_16),
                       child: TextButton(
-                        onPressed: onButtonClick,
+                        onPressed: () async {
+                          _goToNextPage(_orgContext);
+                        },
                         child: Text('내 동네 설정하고 시작하기',
                           style: Theme.of(context).textTheme.button,
                         ),

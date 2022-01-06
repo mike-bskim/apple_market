@@ -42,6 +42,7 @@ dependencies:
   dio: ^4.0.4
   location: ^4.3.0
 #  geolocator: ^8.0.1
+  shared_preferences: ^2.0.11
 
 
 dev_dependencies:

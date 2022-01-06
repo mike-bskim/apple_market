@@ -7,6 +7,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddressPage extends StatefulWidget {
   const AddressPage({Key? key}) : super(key: key);
@@ -83,9 +84,12 @@ class _AddressPageState extends State<AddressPage> {
                     return Container();
                   }
                   return ListTile(
+                    onTap: () {
+                      _saveAddressOnSharedPreference(_addressModel!.result!.items![index].address!.road??'');
+                    },
                     leading: ExtendedImage.asset('assets/imgs/apple.png'),
-                    title: Text(_addressModel!.result!.items![index].address!.road!),
-                    subtitle: Text(_addressModel!.result!.items![index].address!.parcel!),
+                    title: Text(_addressModel!.result!.items![index].address!.road??''),
+                    subtitle: Text(_addressModel!.result!.items![index].address!.parcel??''),
                   );
                 },
               ),
@@ -102,6 +106,9 @@ class _AddressPageState extends State<AddressPage> {
                     return Container();
                   }
                   return ListTile(
+                    onTap: () {
+                      _saveAddressOnSharedPreference(_addressModelXYList[index].result![0].text ?? '');
+                    },
                     leading: ExtendedImage.asset('assets/imgs/apple.png'),
                     title: Text(_addressModelXYList[index].result![0].text ?? ''),
                     subtitle: Text(_addressModelXYList[index].result![0].zipcode ?? ''),
@@ -114,11 +121,17 @@ class _AddressPageState extends State<AddressPage> {
     );
   }
 
+  _saveAddressOnSharedPreference(String address) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    logger.d('save Address: $address.');
+    await prefs.setString('address', address);
+  }
+
   void onClickTextField(text) async {
-            _addressModelXYList.clear();
-            _addressModel = await AddressService().searchAddressByStr(text);
-            setState(() {});
-          }
+    _addressModelXYList.clear();
+    _addressModel = await AddressService().searchAddressByStr(text);
+    setState(() {});
+  }
 
   void onClickSearchAddress() async {
     final text = _addressController.text;
@@ -164,8 +177,8 @@ class _AddressPageState extends State<AddressPage> {
     logger.d('_locationData: ${_locationData.toString()}');
     List<AddressModelXY> _addressModelXY = await AddressService().findAddressByCoordinate(
         // log: _locationData.longitude!, lat: _locationData.latitude!);
-        log: 126.71447360681148,
-        lat: 37.36341055367434);
+        log: 126.978275264,
+        lat: 37.566642192);
     _addressModelXYList.addAll(_addressModelXY);
 
     setState(() {

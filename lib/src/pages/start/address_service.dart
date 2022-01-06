@@ -6,12 +6,6 @@ import 'package:apple_market/src/utils/logger.dart';
 // import 'package:flutter/cupertino.dart';
 
 class AddressService {
-  // void dioTest() async {
-  //   var resp = await Dio().get("https://randomuser.me/api/").catchError((e){
-  //     logger.e(e.error);
-  //   });
-  //   logger.d('resp: [$resp]');
-  // }
 
   // string -> json(이부분은 fltter에서 자동처리함) -> object
   Future<AddressModel> searchAddressByStr(String text) async {
@@ -48,22 +42,14 @@ class AddressService {
       else if (i==4){x = -1; y=0;}
       else {x = 0; y=0;}
 
-
       formData.add({
         'key':vWorldKey,
         'service':'address',
         'request':'getAddress',
-        'type':'BOTH',
+        'type':'PARCEL',
         'point':'${log+0.01*x},${lat+0.01*y}',
       });
     }
-    // final formData = {
-    //   'key':vWorldKey,
-    //   'service':'address',
-    //   'request':'getAddress',
-    //   'type':'BOTH',
-    //   'point':'$log,$lat',
-    // };
 
     List<AddressModelXY> addressModelXYs = [];
 

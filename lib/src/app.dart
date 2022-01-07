@@ -9,7 +9,7 @@ final _routerDelegate = BeamerDelegate(
   guards: [BeamGuard(
     pathPatterns: ['/'],
     check: (context, location){
-      return context.watch<UserProvider>().userState;
+      return true;//context.watch<UserProvider>().userState;
     },
     showPage: BeamPage(child: StartScreen()),
   )],
@@ -29,7 +29,7 @@ class AppleApp extends StatelessWidget {
           fontFamily: 'Dohyeon',
           hintColor: Colors.grey[350],
           textTheme: const TextTheme(
-            headline3: TextStyle(fontFamily: 'Dohyeon'),
+            // headline3: TextStyle(fontFamily: 'Dohyeon'),
             button: TextStyle(color: Colors.white),
           ),
           textButtonTheme: TextButtonThemeData(
@@ -44,6 +44,10 @@ class AppleApp extends StatelessWidget {
             elevation: 2,
             titleTextStyle: TextStyle(color: Colors.black87),
             actionsIconTheme: IconThemeData(color: Colors.black87),
+          ),
+          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+            selectedItemColor: Colors.black87,
+            unselectedItemColor: Colors.black54,
           ),
         ),
         routeInformationParser: BeamerParser(),

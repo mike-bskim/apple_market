@@ -8,18 +8,18 @@ import 'package:provider/provider.dart';
 class IntroPage extends StatelessWidget {
   const IntroPage({Key? key}) : super(key: key);
 
-  Future<void> _goToNextPage(context) async {
-    context
-        .read<PageController>()
-        .animateToPage(1, duration: const Duration(milliseconds: 500), curve: Curves.ease);
-    logger.d('on Intro page Button Clicked !!!');
-  }
+  // Future<void> _goToNextPage(context) async {
+  //   context
+  //       .read<PageController>()
+  //       .animateToPage(1, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+  //   logger.d('on Intro page Button Clicked !!!');
+  // }
 
   @override
   Widget build(BuildContext context) {
     logger.d("IntroPage >> build");
     logger.d('current user state: ${context.read<UserProvider>().userState}');
-    var _orgContext = context;
+    // var _orgContext = context;
     FocusScope.of(context).unfocus();
 
     return LayoutBuilder(

@@ -1,3 +1,4 @@
+import 'package:apple_market/src/pages/home/items_page.dart';
 import 'package:apple_market/src/states/user_provider.dart';
 import 'package:apple_market/src/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
@@ -84,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: IndexedStack(
         index: _bottomSelectedIndex,
         children: <Widget>[
-          Container(color: Colors.accents[0],),
+          ItemsPage(),
           Container(color: Colors.accents[1],),
           Container(color: Colors.accents[2],),
           Container(color: Colors.accents[3],),

@@ -19,6 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     logger.d('HomeScreen >> build');
     logger.d('current user state: ${context.read<UserProvider>().userState}');
+    final a = MediaQuery.of(context).size;
 
     return Scaffold(
 

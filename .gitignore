@@ -47,3 +47,4 @@ app.*.map.json
 
 # Personal Key
 keys.dart
+key.properties

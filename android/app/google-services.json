@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1016242484796",
+    "project_id": "honge-apple-market",
+    "storage_bucket": "honge-apple-market.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1016242484796:android:52b30a2b437f2fd36eb539",
+        "android_client_info": {
+          "package_name": "com.honge.apple_market"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1016242484796-ackg3rnhftgo236s3ff55i3g2jcilsj7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.honge.apple_market",
+            "certificate_hash": "583de3b7ba3eb5568632771876f44e92f6403972"
+          }
+        },
+        {
+          "client_id": "1016242484796-aavnotu1dohi9f350ghmar4afqkq4h18.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC34eDOtBYCmxJN-grLplrzs4pSH9XtDVQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1016242484796-aavnotu1dohi9f350ghmar4afqkq4h18.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

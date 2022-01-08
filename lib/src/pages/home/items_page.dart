@@ -53,7 +53,7 @@ class ItemsPage extends StatelessWidget {
                           '53일전',
                           style: Theme.of(context).textTheme.subtitle2,
                         ),
-                        Text('5000원'),
+                        Text('${index + 5000}원'),
                         Expanded(child: Container()),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,

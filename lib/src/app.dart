@@ -9,7 +9,7 @@ final _routerDelegate = BeamerDelegate(
   guards: [BeamGuard(
     pathPatterns: ['/'],
     check: (context, location){
-      return true;//context.watch<UserProvider>().userState;
+      return context.watch<UserProvider>().user != null;
     },
     showPage: BeamPage(child: StartScreen()),
   )],
@@ -22,7 +22,9 @@ class AppleApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<UserProvider>(
-      create: (BuildContext context) { return UserProvider(); },
+      create: (BuildContext context) {
+        return UserProvider();
+      },
       child: MaterialApp.router(
         theme: ThemeData(
           primarySwatch: Colors.red,

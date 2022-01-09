@@ -1,5 +1,5 @@
 import 'package:apple_market/src/constants/common_size.dart';
-import 'package:apple_market/src/states/user_provider.dart';
+// import 'package:apple_market/src/states/user_provider.dart';
 import 'package:apple_market/src/utils/logger.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +17,8 @@ class IntroPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    logger.d("IntroPage >> build");
-    logger.d('current user state: ${context.read<UserProvider>().userState}');
+    // logger.d("IntroPage >> build");
+    // logger.d('current user state: ${context.read<UserProvider>().userState}');
     // var _orgContext = context;
     FocusScope.of(context).unfocus();
 

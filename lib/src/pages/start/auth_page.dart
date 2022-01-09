@@ -1,10 +1,13 @@
 import 'package:apple_market/src/constants/common_size.dart';
-import 'package:apple_market/src/states/user_provider.dart';
+
+// import 'package:apple_market/src/states/user_provider.dart';
 import 'package:apple_market/src/utils/logger.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
-import 'package:provider/provider.dart';
+
+// import 'package:provider/provider.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthPage extends StatefulWidget {
@@ -23,9 +26,11 @@ class _AuthPageState extends State<AuthPage> {
   );
 
   final TextEditingController _phoneNumberController = TextEditingController();
- // text: "010"
+
+  // text: "010"
   final TextEditingController _codeController = TextEditingController();
- // text: "010"
+
+  // text: "010"
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   VerificationStatus _verificationStatus = VerificationStatus.none;
@@ -36,7 +41,6 @@ class _AuthPageState extends State<AuthPage> {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-
         Size size = MediaQuery.of(context).size;
 
         return IgnorePointer(
@@ -45,7 +49,8 @@ class _AuthPageState extends State<AuthPage> {
             key: _formKey,
             child: Scaffold(
               appBar: AppBar(
-                title: Text('전화번호 로그인',
+                title: Text(
+                  '전화번호 로그인',
                   style: Theme.of(context).appBarTheme.titleTextStyle,
                 ),
               ),
@@ -57,15 +62,20 @@ class _AuthPageState extends State<AuthPage> {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        ExtendedImage.asset('assets/imgs/padlock.png',
+                        ExtendedImage.asset(
+                          'assets/imgs/padlock.png',
                           width: size.width * 0.15,
                           height: size.width * 0.15,
                         ),
-                        const SizedBox(width: padding_08,),
+                        const SizedBox(
+                          width: padding_08,
+                        ),
                         const Text('사과마켓은 휴대폰 번호로 가입해요 \n번호는 안전하게 보관되며 \n어디에도 공개되지 않아요.'),
                       ],
                     ),
-                    const SizedBox(height: padding_16,),
+                    const SizedBox(
+                      height: padding_16,
+                    ),
                     TextFormField(
                       controller: _phoneNumberController,
                       keyboardType: TextInputType.phone,
@@ -73,42 +83,71 @@ class _AuthPageState extends State<AuthPage> {
                       decoration: InputDecoration(
                         hintText: '전화번호 입력',
                         hintStyle: TextStyle(color: Theme.of(context).hintColor),
-                        focusedBorder:inputBorder,
-                        border:inputBorder,
+                        focusedBorder: inputBorder,
+                        border: inputBorder,
                       ),
-                      validator: (phoneNumber){
+                      validator: (phoneNumber) {
                         if (phoneNumber != null && phoneNumber.length == 13) {
                           return null;
                         } else {
                           return '전화번호 입력 오류입니다';
-                       }
-                      },
-                    ),
-                    const SizedBox(height: padding_16,),
-                    TextButton(
-                      onPressed: (){
-                        // _getAddress();
-                        FocusScope.of(context).unfocus();
-                        if (_formKey.currentState != null) {
-                          bool passed = _formKey.currentState!.validate();
-                          logger.d('passed >>> ' + passed.toString());
-                          if (passed) {
-                            setState(() {
-                              _verificationStatus = VerificationStatus.codeSent;
-                            });
-                          } else {
-                            setState(() {
-                              _verificationStatus = VerificationStatus.none;
-                            });
-                          }
                         }
                       },
-                      child: const Text('인증문자 발송')
                     ),
-                    const SizedBox(height: padding_16 * 2,),
+                    const SizedBox(
+                      height: padding_16,
+                    ),
+                    TextButton(
+                        onPressed: () async {
+                          // _getAddress();
+                          FocusScope.of(context).unfocus();
+                          if (_formKey.currentState != null) {
+                            bool passed = _formKey.currentState!.validate();
+                            logger.d('passed >>> ' + passed.toString());
+                            if (passed) {
+                              FirebaseAuth auth = FirebaseAuth.instance;
+
+                              await auth.verifyPhoneNumber(
+                                phoneNumber: '+821040155592',
+                                verificationCompleted: (PhoneAuthCredential credential) async {
+                                  // ANDROID ONLY!
+                                  // login 이 정상적으로 완료되었는지 확인 코드 추가
+                                  logger.d('전화번호 인증 완료 [$credential]');
+                                  await auth.signInWithCredential(credential);
+                                },
+                                codeAutoRetrievalTimeout: (String verificationId) {
+                                  // 현재는 아무것도 안한다.
+                                },
+                                codeSent: (String verificationId, int? forceResendingToken) async {
+                                  // setState(() {
+                                  //   _verificationStatus = VerificationStatus.codeSent;
+                                  // });
+
+                                  String smsCode = '789632';
+                                  // Create a PhoneAuthCredential with the code
+                                  PhoneAuthCredential credential = PhoneAuthProvider.credential(
+                                      verificationId: verificationId, smsCode: smsCode);
+                                  // Sign the user in (or link) with the credential
+                                  await auth.signInWithCredential(credential);
+                                },
+                                verificationFailed: (FirebaseAuthException error) {
+                                  logger.e(error.message);
+                                },
+                              );
+                            } else {
+                              setState(() {
+                                _verificationStatus = VerificationStatus.none;
+                              });
+                            }
+                          }
+                        },
+                        child: const Text('인증문자 발송')),
+                    const SizedBox(
+                      height: padding_16 * 2,
+                    ),
                     AnimatedOpacity(
                       duration: _duration_300,
-                      opacity: (_verificationStatus == VerificationStatus.none)?0:1,
+                      opacity: (_verificationStatus == VerificationStatus.none) ? 0 : 1,
                       child: AnimatedContainer(
                         duration: _duration_1000,
                         curve: Curves.easeInOut,
@@ -120,25 +159,28 @@ class _AuthPageState extends State<AuthPage> {
                           decoration: InputDecoration(
                             // hintText: '인증문자 입력',
                             hintStyle: TextStyle(color: Theme.of(context).hintColor),
-                            focusedBorder:inputBorder,
-                            border:inputBorder,
+                            focusedBorder: inputBorder,
+                            border: inputBorder,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: padding_16,),
+                    const SizedBox(
+                      height: padding_16,
+                    ),
                     AnimatedContainer(
                       duration: _duration_1000,
                       height: getVerificationBtnHeight(_verificationStatus),
                       child: TextButton(
-                        onPressed: (){
-                          FocusScope.of(context).unfocus();
-                          attemptVarify(context);
-                        },
-                        child: _verificationStatus == VerificationStatus.verifying
-                            ? const CircularProgressIndicator(color: Colors.white,)
-                            : const Text('인증')
-                      ),
+                          onPressed: () {
+                            FocusScope.of(context).unfocus();
+                            attemptVarify(context);
+                          },
+                          child: _verificationStatus == VerificationStatus.verifying
+                              ? const CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
+                              : const Text('인증')),
                     ),
                   ],
                 ),
@@ -150,8 +192,8 @@ class _AuthPageState extends State<AuthPage> {
     );
   }
 
-  double? getVerificationHeight (VerificationStatus status){
-    switch(status) {
+  double? getVerificationHeight(VerificationStatus status) {
+    switch (status) {
       case VerificationStatus.none:
         return 0;
       case VerificationStatus.codeSent:
@@ -161,8 +203,8 @@ class _AuthPageState extends State<AuthPage> {
     }
   }
 
-  double? getVerificationBtnHeight (VerificationStatus status){
-    switch(status) {
+  double? getVerificationBtnHeight(VerificationStatus status) {
+    switch (status) {
       case VerificationStatus.none:
         return 0;
       case VerificationStatus.codeSent:
@@ -181,17 +223,15 @@ class _AuthPageState extends State<AuthPage> {
       _verificationStatus = VerificationStatus.verificationDone;
     });
 
-    context.read<UserProvider>().setUserAuth(true);
+    // context.read<UserProvider>().setUserAuth(true);
   }
 
-  // _getAddress() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String address = prefs.getString('address') ?? '';
-  //   logger.d('get Address: [$address]');
-  // }
+// _getAddress() async {
+//   SharedPreferences prefs = await SharedPreferences.getInstance();
+//   String address = prefs.getString('address') ?? '';
+//   logger.d('get Address: [$address]');
+// }
 
 }
 
-enum VerificationStatus {
-  none, codeSent, verifying, verificationDone
-}
+enum VerificationStatus { none, codeSent, verifying, verificationDone }

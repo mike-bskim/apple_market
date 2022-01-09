@@ -1,9 +1,9 @@
 import 'package:apple_market/src/pages/home/items_page.dart';
-import 'package:apple_market/src/states/user_provider.dart';
 import 'package:apple_market/src/utils/logger.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -18,8 +18,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     logger.d('HomeScreen >> build');
-    logger.d('current user state: ${context.read<UserProvider>().userState}');
-    final a = MediaQuery.of(context).size;
 
     return Scaffold(
 
@@ -32,18 +30,15 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
               onPressed: () {
-                context.read<UserProvider>().setUserAuth(false);
+                // context.read<UserProvider>().setUserAuth(false);
+                FirebaseAuth.instance.signOut();
               },
               icon: const Icon(Icons.logout)),
           IconButton(
-              onPressed: () {
-                context.read<UserProvider>().setUserAuth(false);
-              },
+              onPressed: () {},
               icon: const Icon(CupertinoIcons.search)),
           IconButton(
-              onPressed: () {
-                context.read<UserProvider>().setUserAuth(false);
-              },
+              onPressed: () {},
               icon: const Icon(CupertinoIcons.text_justify)),
         ],
       ),
@@ -86,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: IndexedStack(
         index: _bottomSelectedIndex,
         children: <Widget>[
-          ItemsPage(),
+          const ItemsPage(),
           Container(color: Colors.accents[1],),
           Container(color: Colors.accents[2],),
           Container(color: Colors.accents[3],),

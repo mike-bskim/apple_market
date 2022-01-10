@@ -1,4 +1,6 @@
 import 'package:apple_market/src/constants/common_size.dart';
+import 'package:apple_market/src/repo/user_service.dart';
+import 'package:apple_market/src/utils/logger.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -42,52 +44,58 @@ class ItemsPage extends StatelessWidget {
       },
       itemCount: 10,
       itemBuilder: (context, index) {
-        return SizedBox(
-          height: imgSize,
-          child: Row(
-            children: <Widget>[
-              SizedBox(
-                  height: imgSize,
-                  width: imgSize,
-                  child: ExtendedImage.network(
-                    'https://picsum.photos/100',
-                    shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.circular(15.0),
-                  )),
-              const SizedBox(
-                width: padding_16,
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text('work', style: Theme.of(context).textTheme.subtitle1),
-                    Text('53일전', style: Theme.of(context).textTheme.subtitle2),
-                    Text('${index + 5000}원'),
-                    Expanded(child: Container()),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        SizedBox(
-                          height: 16,
-                          child: FittedBox(
-                            fit: BoxFit.fitHeight,
-                            child: Row(
-                              children: const [
-                                Icon(CupertinoIcons.chat_bubble_2, color: Colors.grey),
-                                Text('23', style: TextStyle(color: Colors.grey)),
-                                Icon(CupertinoIcons.heart, color: Colors.grey),
-                                Text('123', style: TextStyle(color: Colors.grey)),
-                              ],
+        return InkWell(
+          onTap: () {
+            logger.d('UserService().firestore >>>');
+            UserService().firestoreReadTest();
+          },
+          child: SizedBox(
+            height: imgSize,
+            child: Row(
+              children: <Widget>[
+                SizedBox(
+                    height: imgSize,
+                    width: imgSize,
+                    child: ExtendedImage.network(
+                      'https://picsum.photos/100',
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.circular(15.0),
+                    )),
+                const SizedBox(
+                  width: padding_16,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text('work', style: Theme.of(context).textTheme.subtitle1),
+                      Text('53일전', style: Theme.of(context).textTheme.subtitle2),
+                      Text('${index + 5000}원'),
+                      Expanded(child: Container()),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          SizedBox(
+                            height: 16,
+                            child: FittedBox(
+                              fit: BoxFit.fitHeight,
+                              child: Row(
+                                children: const [
+                                  Icon(CupertinoIcons.chat_bubble_2, color: Colors.grey),
+                                  Text('23', style: TextStyle(color: Colors.grey)),
+                                  Icon(CupertinoIcons.heart, color: Colors.grey),
+                                  Text('123', style: TextStyle(color: Colors.grey)),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },

@@ -54,7 +54,7 @@ android {
         //flutter.minSdkVersion
         //flutter.targetSdkVersion
         applicationId "com.honge.apple_market"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

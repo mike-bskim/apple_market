@@ -1,6 +1,8 @@
 /// Input : {"point":{"x":"126.71447360681148","y":"37.353410553674344"},"crs":"","type":"BOTH"}
 /// Result : [{"zipcode":"","type":"parcel","text":"경기도 시흥시 정왕동 1946","structure":{"level0":"대한민국","level1":"경기도","level2":"시흥시","level3":"","level4L":"정왕동","level4LC":"4139013200","level4A":"","level4AC":"","level5":"1946공","detail":""}}]
 
+// ignore_for_file: file_names
+
 class AddressModelXY {
   AddressModelXY({Input? input, List<Result>? result,}){
     _input = input;

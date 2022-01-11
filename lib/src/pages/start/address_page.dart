@@ -1,4 +1,5 @@
 import 'package:apple_market/src/constants/common_size.dart';
+import 'package:apple_market/src/constants/shared_pref_key.dart';
 import 'package:apple_market/src/model/address_model.dart';
 import 'package:apple_market/src/model/address_modelXY.dart';
 import 'package:apple_market/src/utils/logger.dart';
@@ -48,7 +49,9 @@ class _AddressPageState extends State<AddressPage> {
                 color: Colors.grey,
               ),
               hintText: '도로명으로 검색',
-              hintStyle: TextStyle(color: Theme.of(context).hintColor),
+              hintStyle: TextStyle(color: Theme
+                  .of(context)
+                  .hintColor),
               border: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
               // focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.blue)),
               prefixIconConstraints: const BoxConstraints(minWidth: 24, maxHeight: 24),
@@ -57,20 +60,23 @@ class _AddressPageState extends State<AddressPage> {
           TextButton.icon(
             label: Text(
               _isGettingLocation ? '위치 찾는중 ~~' : '현재위치 찾기',
-              style: Theme.of(context).textTheme.button,
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .button,
             ),
             onPressed: myLocation,
             icon: _isGettingLocation
                 ? const SizedBox(
-                    child: CircularProgressIndicator(color: Colors.white),
-                    height: 20,
-                    width: 20,
-                  )
+              child: CircularProgressIndicator(color: Colors.white),
+              height: 20,
+              width: 20,
+            )
                 : const Icon(
-                    CupertinoIcons.compass,
-                    color: Colors.white,
-                    size: 20,
-                  ),
+              CupertinoIcons.compass,
+              color: Colors.white,
+              size: 20,
+            ),
           ),
           if (_addressModel != null)
             Expanded(
@@ -78,8 +84,8 @@ class _AddressPageState extends State<AddressPage> {
                 padding: const EdgeInsets.symmetric(vertical: padding_16),
                 // shrinkWrap: true,
                 itemCount: (_addressModel == null ||
-                        _addressModel!.result == null ||
-                        _addressModel!.result!.items == null)
+                    _addressModel!.result == null ||
+                    _addressModel!.result!.items == null)
                     ? 0
                     : _addressModel!.result!.items!.length,
                 itemBuilder: (context, index) {
@@ -92,7 +98,11 @@ class _AddressPageState extends State<AddressPage> {
                   }
                   return ListTile(
                     onTap: () {
-                      _saveAddressAndGoToNextPage(_addressModel!.result!.items![index].address!.road ?? '');
+                      _saveAddressAndGoToNextPage(
+                        _addressModel!.result!.items![index].address!.road ?? '',
+                        num.parse(_addressModel!.result!.items![index].point!.y ?? '0'),
+                        num.parse(_addressModel!.result!.items![index].point!.x ?? '0'),
+                      );
                     },
                     leading: ExtendedImage.asset('assets/imgs/apple.png'),
                     title: Text(_addressModel!.result!.items![index].address!.road ?? ''),
@@ -114,7 +124,9 @@ class _AddressPageState extends State<AddressPage> {
                   }
                   return ListTile(
                     onTap: () {
-                      _saveAddressAndGoToNextPage(_addressModelXYList[index].result![0].text ?? '');
+                      _saveAddressAndGoToNextPage(_addressModelXYList[index].result![0].text ?? '',
+                        num.parse(_addressModelXYList[index].input!.point!.y ?? '0') ,
+                        num.parse(_addressModelXYList[index].input!.point!.x ?? '0') ,);
                     },
                     leading: ExtendedImage.asset('assets/imgs/apple.png'),
                     title: Text(_addressModelXYList[index].result![0].text ?? ''),
@@ -128,16 +140,19 @@ class _AddressPageState extends State<AddressPage> {
     );
   }
 
-  _saveAddressAndGoToNextPage(String address) async {
-    await _saveAddressOnSharedPreference(address);
-    context.read<PageController>().animateToPage(2,
-        duration: const Duration(milliseconds: 500), curve: Curves.ease);
+  _saveAddressAndGoToNextPage(String address, num lat, num lon) async {
+    await _saveAddressOnSharedPreference(address, lat, lon);
+    context
+        .read<PageController>()
+        .animateToPage(2, duration: const Duration(milliseconds: 500), curve: Curves.ease);
   }
 
-  _saveAddressOnSharedPreference(String address) async {
+  _saveAddressOnSharedPreference(String address, num lat, num lon) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     logger.d('save Address: $address.');
-    await prefs.setString('address', address);
+    await prefs.setString(SHARED_ADDRESS, address);
+    await prefs.setDouble(SHARED_LAT, lat.toDouble());
+    await prefs.setDouble(SHARED_LON, lon.toDouble());
   }
 
   void onClickTextField(text) async {
@@ -189,7 +204,7 @@ class _AddressPageState extends State<AddressPage> {
     _locationData = await location.getLocation();
     logger.d('_locationData: ${_locationData.toString()}');
     List<AddressModelXY> _addressModelXY = await AddressService().findAddressByCoordinate(
-        // log: _locationData.longitude!, lat: _locationData.latitude!);
+      // log: _locationData.longitude!, lat: _locationData.latitude!);
         log: 126.978275264,
         lat: 37.566642192);
     _addressModelXYList.addAll(_addressModelXY);

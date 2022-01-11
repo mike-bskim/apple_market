@@ -47,7 +47,7 @@ class ItemsPage extends StatelessWidget {
         return InkWell(
           onTap: () {
             logger.d('UserService().firestore >>>');
-            UserService().firestoreReadTest();
+            UserService().fireStoreReadTest();
           },
           child: SizedBox(
             height: imgSize,

@@ -1,5 +1,6 @@
 import 'package:apple_market/src/pages/home/items_page.dart';
 import 'package:apple_market/src/utils/logger.dart';
+import 'package:apple_market/src/widgets/expandable_fab.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,33 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
 
+      floatingActionButton: ExpandableFab(
+        distance: 90,
+        children: <Widget>[
+          MaterialButton(
+            onPressed: () {},
+            shape: CircleBorder(),
+            height: 48,
+            color: Theme.of(context).colorScheme.primary,
+            child: Icon(Icons.add),
+          ),
+          MaterialButton(
+            onPressed: () {},
+            shape: CircleBorder(),
+            height: 48,
+            color: Theme.of(context).colorScheme.primary,
+            child: Icon(Icons.add),
+          ),
+          MaterialButton(
+            onPressed: () {},
+            shape: CircleBorder(),
+            height: 48,
+            color: Theme.of(context).colorScheme.primary,
+            child: Icon(Icons.add),
+          ),
+        ],
+
+      ),
       appBar: AppBar(
         centerTitle: false,
         title: Text(

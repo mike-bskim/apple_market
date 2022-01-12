@@ -1,4 +1,5 @@
 import 'package:apple_market/src/constants/common_size.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 
 class MultiImageSelect extends StatelessWidget {
@@ -11,6 +12,7 @@ class MultiImageSelect extends StatelessWidget {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         Size _size = MediaQuery.of(context).size;
+        var imgSize = (_size.width / 3) - padding_16 * 2;
 
         return SizedBox(
           height: _size.width / 3,
@@ -21,9 +23,9 @@ class MultiImageSelect extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(padding_16),
                 child: Container(
-                  width: _size.width / 3 - padding_16 * 2,
+                  width: imgSize,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(padding_16),
                     border: Border.all(color: Colors.grey, width: 1),
                   ),
                   child: Column(
@@ -35,11 +37,19 @@ class MultiImageSelect extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(width: 100, color: Colors.black87),
-              Container(width: 100, color: Colors.grey),
-              Container(width: 100, color: Colors.amberAccent),
-              Container(width: 100, color: Colors.black87),
-              Container(width: 100, color: Colors.grey),
+              ...List.generate(
+                20,
+                (index) => Padding(
+                  padding: const EdgeInsets.only(right: padding_16, top: padding_16, bottom: padding_16),
+                  child: ExtendedImage.network(
+                    'https://picsum.photos/100',
+                    width: imgSize,
+                    height: imgSize,
+                    borderRadius: BorderRadius.circular(padding_16),
+                    shape: BoxShape.rectangle,
+                  ),
+                ),
+              ),
             ],
           ),
         );

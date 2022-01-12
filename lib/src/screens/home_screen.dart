@@ -1,4 +1,4 @@
-import 'package:apple_market/src/pages/home/items_page.dart';
+import 'package:apple_market/src/screens/home/items_page.dart';
 import 'package:apple_market/src/utils/logger.dart';
 import 'package:apple_market/src/widgets/expandable_fab.dart';
 import 'package:beamer/beamer.dart';

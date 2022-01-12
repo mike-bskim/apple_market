@@ -1,4 +1,4 @@
-import 'package:apple_market/src/pages/start_page.dart';
+import 'package:apple_market/src/screens/start_screen.dart';
 import 'package:apple_market/src/router/locations.dart';
 import 'package:apple_market/src/states/user_provider.dart';
 import 'package:beamer/beamer.dart';
@@ -35,6 +35,7 @@ class AppleApp extends StatelessWidget {
             button: TextStyle(color: Colors.white),
             subtitle1: TextStyle(color: Colors.black87, fontSize: 15),
             subtitle2: TextStyle(color: Colors.grey, fontSize: 13),
+            bodyText2: TextStyle(color: Colors.black87, fontSize: 12, fontWeight: FontWeight.w300),
           ),
           textButtonTheme: TextButtonThemeData(
             style: TextButton.styleFrom(

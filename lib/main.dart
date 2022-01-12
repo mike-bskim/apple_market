@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:apple_market/src/app.dart';
-import 'package:apple_market/src/pages/splash_page.dart';
+import 'package:apple_market/src/screens/splash_screen.dart';
 import 'package:apple_market/src/utils/logger.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

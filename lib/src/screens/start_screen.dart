@@ -1,6 +1,6 @@
-import 'package:apple_market/src/pages/start/address_page.dart';
-import 'package:apple_market/src/pages/start/auth_page.dart';
-import 'package:apple_market/src/pages/start/intro_page.dart';
+import 'package:apple_market/src/screens/start/address_page.dart';
+import 'package:apple_market/src/screens/start/auth_page.dart';
+import 'package:apple_market/src/screens/start/intro_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

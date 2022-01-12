@@ -3,7 +3,7 @@ import 'package:apple_market/src/constants/shared_pref_key.dart';
 import 'package:apple_market/src/model/address_model.dart';
 import 'package:apple_market/src/model/address_modelXY.dart';
 import 'package:apple_market/src/utils/logger.dart';
-import 'package:apple_market/src/pages/start/address_service.dart';
+import 'package:apple_market/src/screens/start/address_service.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

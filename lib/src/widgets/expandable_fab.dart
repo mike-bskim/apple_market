@@ -60,7 +60,7 @@ class _ExpandableFabState extends State<ExpandableFab> with SingleTickerProvider
         alignment: Alignment.bottomRight,
         clipBehavior: Clip.none,
         children: [
-          Container( // 커스텀 위치/사이즈 조정
+          SizedBox( // 커스텀 위치/사이즈 조정
             height: 56,
             width: 56,
             child: Center(child: _buildTapToCloseFab()),
@@ -131,7 +131,7 @@ class _ExpandableFabState extends State<ExpandableFab> with SingleTickerProvider
 
 @immutable
 class _ExpandingActionButton extends StatelessWidget {
-  _ExpandingActionButton({
+  const _ExpandingActionButton({
     Key? key,
     required this.directionInDegrees,
     required this.maxDistance,
@@ -158,7 +158,7 @@ class _ExpandingActionButton extends StatelessWidget {
           bottom: offset.dy,
           child: Transform.rotate(
             angle: (1.0 - progress!.value) * pi / 2,
-            child: Container(height: 56, child: Center(child: child)), // 커스텀 사이즈 조정
+            child: SizedBox(height: 56, child: Center(child: child)), // 커스텀 사이즈 조정
           ),
         );
       },

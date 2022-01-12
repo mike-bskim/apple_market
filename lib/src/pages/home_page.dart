@@ -1,10 +1,10 @@
 import 'package:apple_market/src/pages/home/items_page.dart';
 import 'package:apple_market/src/utils/logger.dart';
 import 'package:apple_market/src/widgets/expandable_fab.dart';
+import 'package:beamer/beamer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -26,25 +26,27 @@ class _HomeScreenState extends State<HomeScreen> {
         distance: 90,
         children: <Widget>[
           MaterialButton(
-            onPressed: () {},
-            shape: CircleBorder(),
+            onPressed: () {
+              context.beamToNamed('/input');
+            },
+            shape: const CircleBorder(),
             height: 48,
             color: Theme.of(context).colorScheme.primary,
-            child: Icon(Icons.add),
+            child: const Icon(Icons.edit),
           ),
           MaterialButton(
             onPressed: () {},
-            shape: CircleBorder(),
+            shape: const CircleBorder(),
             height: 48,
             color: Theme.of(context).colorScheme.primary,
-            child: Icon(Icons.add),
+            child: const Icon(Icons.input),
           ),
           MaterialButton(
             onPressed: () {},
-            shape: CircleBorder(),
+            shape: const CircleBorder(),
             height: 48,
             color: Theme.of(context).colorScheme.primary,
-            child: Icon(Icons.add),
+            child: const Icon(Icons.add),
           ),
         ],
 

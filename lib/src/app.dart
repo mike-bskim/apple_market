@@ -13,7 +13,7 @@ final _routerDelegate = BeamerDelegate(
     },
     showPage: BeamPage(child: StartScreen()),
   )],
-  locationBuilder: BeamerLocationBuilder(beamLocations: [HomeLocation()])
+  locationBuilder: BeamerLocationBuilder(beamLocations: [HomeLocation(), InputLocation()])
 );
 
 class AppleApp extends StatelessWidget {
@@ -45,6 +45,7 @@ class AppleApp extends StatelessWidget {
           ),
           appBarTheme: const AppBarTheme(
             backgroundColor: Colors.white,
+            foregroundColor: Colors.black87,
             elevation: 2,
             titleTextStyle: TextStyle(color: Colors.black87),
             actionsIconTheme: IconThemeData(color: Colors.black87),

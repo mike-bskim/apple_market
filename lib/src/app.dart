@@ -5,16 +5,15 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-final _routerDelegate = BeamerDelegate(
-  guards: [BeamGuard(
+final _routerDelegate = BeamerDelegate(guards: [
+  BeamGuard(
     pathPatterns: ['/'],
-    check: (context, location){
+    check: (context, location) {
       return context.watch<UserProvider>().user != null;
     },
     showPage: BeamPage(child: StartScreen()),
-  )],
-  locationBuilder: BeamerLocationBuilder(beamLocations: [HomeLocation(), InputLocation()])
-);
+  )
+], locationBuilder: BeamerLocationBuilder(beamLocations: [HomeLocation(), InputLocation()]));
 
 class AppleApp extends StatelessWidget {
   const AppleApp({Key? key}) : super(key: key);
@@ -37,12 +36,16 @@ class AppleApp extends StatelessWidget {
             subtitle2: TextStyle(color: Colors.grey, fontSize: 13),
             bodyText2: TextStyle(color: Colors.black87, fontSize: 12, fontWeight: FontWeight.w300),
           ),
+          inputDecorationTheme: const InputDecorationTheme(
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.transparent),
+            ),
+          ),
           textButtonTheme: TextButtonThemeData(
             style: TextButton.styleFrom(
-              backgroundColor: Colors.red,
-              primary: Colors.white,
-              minimumSize: const Size(10,48)
-            ),
+                backgroundColor: Colors.red,
+                primary: Colors.white,
+                minimumSize: const Size(10, 48)),
           ),
           appBarTheme: const AppBarTheme(
             backgroundColor: Colors.white,

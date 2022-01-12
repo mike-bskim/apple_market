@@ -11,6 +11,15 @@ class InputScreen extends StatefulWidget {
 }
 
 class _InputScreenState extends State<InputScreen> {
+
+  final dividerCustom = Divider(
+    height: 1,
+    thickness: 1,
+    color: Colors.grey[300],
+    indent: padding_16,
+    endIndent: padding_16,
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,15 +55,31 @@ class _InputScreenState extends State<InputScreen> {
         ),
       ),
       body: ListView(
-        children: const <Widget>[
-          MultiImageSelect(),
-          Divider(
-            height: 1,
-            thickness: 1,
-            color: Colors.grey,
-            indent: padding_16,
-            endIndent: padding_16,
+        children: <Widget>[
+          const MultiImageSelect(),
+          dividerCustom,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: padding_16),
+            child: TextFormField(
+              decoration: const InputDecoration(
+                hintText: '글제목',
+                border: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.transparent),
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.transparent),
+                ),
+              ),
+            ),
           ),
+          dividerCustom,
+          const ListTile(
+            dense: true,
+            title: Text('선택'),
+            trailing: Icon(Icons.navigate_next),
+          ),
+          dividerCustom,
+          
         ],
       ),
     );

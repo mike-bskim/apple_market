@@ -36,11 +36,11 @@ class AppleApp extends StatelessWidget {
             subtitle2: TextStyle(color: Colors.grey, fontSize: 13),
             bodyText2: TextStyle(color: Colors.black87, fontSize: 12, fontWeight: FontWeight.w300),
           ),
-          inputDecorationTheme: const InputDecorationTheme(
-            enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.transparent),
-            ),
-          ),
+          // inputDecorationTheme: const InputDecorationTheme(
+          //   enabledBorder: UnderlineInputBorder(
+          //     borderSide: BorderSide(color: Colors.transparent),
+          //   ),
+          // ),
           textButtonTheme: TextButtonThemeData(
             style: TextButton.styleFrom(
                 backgroundColor: Colors.red,

@@ -25,7 +25,7 @@ class _InputScreenState extends State<InputScreen> {
       const UnderlineInputBorder(borderSide: BorderSide(color: Colors.transparent));
 
   bool _suggestPriceSelected = false;
-  TextEditingController _priceController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
 
   @override
   void dispose() {
@@ -84,10 +84,13 @@ class _InputScreenState extends State<InputScreen> {
           ),
           dividerCustom,
           // 카타고리 영역
-          const ListTile(
+          ListTile(
+            onTap: () {
+              context.beamToNamed('/input/category_input');
+            },
             dense: true,
-            title: Text('선택'),
-            trailing: Icon(Icons.navigate_next),
+            title: const Text('선택'),
+            trailing: const Icon(Icons.navigate_next),
           ),
           dividerCustom,
           Row(
@@ -148,6 +151,7 @@ class _InputScreenState extends State<InputScreen> {
             ],
           ),
           dividerCustom,
+          // 올릴 게시글 내용을 작성
           TextFormField(
             maxLines: null,
             keyboardType: TextInputType.multiline,

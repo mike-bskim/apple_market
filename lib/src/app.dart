@@ -1,6 +1,6 @@
 import 'package:apple_market/src/screens/start_screen.dart';
 import 'package:apple_market/src/router/locations.dart';
-import 'package:apple_market/src/states/user_provider.dart';
+import 'package:apple_market/src/states/user_notifier.dart';
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +9,7 @@ final _routerDelegate = BeamerDelegate(guards: [
   BeamGuard(
     pathPatterns: ['/'],
     check: (context, location) {
-      return context.watch<UserProvider>().user != null;
+      return context.watch<UserNotifier>().user != null;
     },
     showPage: BeamPage(child: StartScreen()),
   )
@@ -20,9 +20,9 @@ class AppleApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<UserProvider>(
+    return ChangeNotifierProvider<UserNotifier>(
       create: (BuildContext context) {
-        return UserProvider();
+        return UserNotifier();
       },
       child: MaterialApp.router(
         theme: ThemeData(

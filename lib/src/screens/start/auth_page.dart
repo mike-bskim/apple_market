@@ -1,7 +1,7 @@
 import 'package:apple_market/src/constants/common_size.dart';
 import 'package:apple_market/src/constants/shared_pref_key.dart';
 
-// import 'package:apple_market/src/states/user_provider.dart';
+// import 'package:apple_market/src/states/user_notifier.dart';
 import 'package:apple_market/src/utils/logger.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';

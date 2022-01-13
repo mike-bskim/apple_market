@@ -1,8 +1,10 @@
 import 'package:apple_market/src/screens/home_screen.dart';
 import 'package:apple_market/src/screens/input/category_input_screen.dart';
 import 'package:apple_market/src/screens/input_screen.dart';
+import 'package:apple_market/src/states/category_notifier.dart';
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomeLocation extends BeamLocation<BeamState> {
   @override
@@ -17,6 +19,12 @@ class HomeLocation extends BeamLocation<BeamState> {
 }
 
 class InputLocation extends BeamLocation<BeamState> {
+
+  @override
+  Widget builder(BuildContext context, Widget navigator) {
+    return ChangeNotifierProvider.value(value: categoryNotifier,
+    child: super.builder(context, navigator));
+  }
   @override
   List<BeamPage> buildPages(BuildContext context, BeamState state) {
     // TODO: implement buildPages

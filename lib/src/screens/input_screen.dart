@@ -1,9 +1,11 @@
 import 'package:apple_market/src/constants/common_size.dart';
 import 'package:apple_market/src/screens/input/multi_image_select.dart';
+import 'package:apple_market/src/states/category_notifier.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
+import 'package:provider/provider.dart';
 
 class InputScreen extends StatefulWidget {
   const InputScreen({Key? key}) : super(key: key);
@@ -89,7 +91,7 @@ class _InputScreenState extends State<InputScreen> {
               context.beamToNamed('/input/category_input');
             },
             dense: true,
-            title: const Text('선택'),
+            title: Text(context.watch<CategoryNotifier>().currentCategoryInKor),
             trailing: const Icon(Icons.navigate_next),
           ),
           dividerCustom,

@@ -14,13 +14,17 @@ class MultiImageSelect extends StatefulWidget {
 }
 
 class _MultiImageSelectState extends State<MultiImageSelect> {
-  final List<XFile> _images = [];
+  final List<Uint8List> _images = [];
+
+  bool _isPickingImages = false;
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        Size _size = MediaQuery.of(context).size;
+        Size _size = MediaQuery
+            .of(context)
+            .size;
         var imgSize = (_size.width / 3) - padding_16 * 2;
 
         return SizedBox(
@@ -33,15 +37,21 @@ class _MultiImageSelectState extends State<MultiImageSelect> {
                 padding: const EdgeInsets.all(padding_16),
                 child: InkWell(
                   onTap: () async {
+                    _isPickingImages = true;
+                    setState(() {});
+
                     final ImagePicker _picker = ImagePicker();
                     // Pick multiple images
-                    final List<XFile>? images = await _picker.pickMultiImage();
+                    final List<XFile>? images = await _picker.pickMultiImage(imageQuality: 10);
                     if (images != null && images.isNotEmpty) {
-                      _images.clear();
-                      _images.addAll(images);
                       // images[0].readAsBytes(), 데이터 타입 확인용
-                      setState(() {});
+                      _images.clear();
+                      for (var xFile in images) {
+                        _images.add(await xFile.readAsBytes());
+                      }
                     }
+                    _isPickingImages = false;
+                    setState(() {});
                   },
                   child: Container(
                     width: imgSize,
@@ -49,11 +59,17 @@ class _MultiImageSelectState extends State<MultiImageSelect> {
                       borderRadius: BorderRadius.circular(padding_16),
                       border: Border.all(color: Colors.grey, width: 1),
                     ),
-                    child: Column(
+                    child: _isPickingImages ? const Padding(
+                      padding: EdgeInsets.all(padding_16*2),
+                      child: CircularProgressIndicator(),
+                    ) : Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Icon(Icons.camera_alt_rounded, color: Colors.grey),
-                        Text('0/10', style: Theme.of(context).textTheme.subtitle2),
+                        Text('0/10', style: Theme
+                            .of(context)
+                            .textTheme
+                            .subtitle2),
                       ],
                     ),
                   ),
@@ -61,65 +77,54 @@ class _MultiImageSelectState extends State<MultiImageSelect> {
               ),
               ...List.generate(
                 _images.length,
-                (index) => Stack(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        right: padding_16,
-                        top: padding_16,
-                        bottom: padding_16,
-                      ),
-                      // future 타입을 변환해야 함.
-                      child: FutureBuilder<Uint8List>(
-                          future: _images[index].readAsBytes(),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return ExtendedImage.memory(
-                                snapshot.data!,
-                                width: imgSize,
-                                height: imgSize,
-                                fit: BoxFit.cover,
-                                loadStateChanged: (state) {
-                                  switch(state.extendedImageLoadState){
-                                    case LoadState.loading:
-                                      return Container(
-                                        width: imgSize,
-                                        height: imgSize,
-                                        padding: const EdgeInsets.all(padding_16*2),
-                                        child: const CircularProgressIndicator(),
-                                      );
-                                      case LoadState.completed:
-                                      return null;
-                                    case LoadState.failed:
-                                      return const Icon(Icons.cancel);
-                                  }
-                                },
-                                borderRadius: BorderRadius.circular(padding_16),
-                                shape: BoxShape.rectangle,
-                              );
-                            } else {
-                              return SizedBox(
-                                width: imgSize,
-                                height: imgSize,
-                                child: const CircularProgressIndicator(),
-                              );
-                            }
-                          }),
+                    (index) =>
+                    Stack(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              right: padding_16, top: padding_16, bottom: padding_16),
+                          // future 타입을 변환해야 함.
+                          child: ExtendedImage.memory(
+                            _images[index],
+                            width: imgSize,
+                            height: imgSize,
+                            fit: BoxFit.cover,
+                            loadStateChanged: (state) {
+                              switch (state.extendedImageLoadState) {
+                                case LoadState.loading:
+                                  return Container(
+                                    width: imgSize,
+                                    height: imgSize,
+                                    padding: const EdgeInsets.all(padding_16 * 2),
+                                    child: const CircularProgressIndicator(),
+                                  );
+                                case LoadState.completed:
+                                  return null;
+                                case LoadState.failed:
+                                  return const Icon(Icons.cancel);
+                              }
+                            },
+                            borderRadius: BorderRadius.circular(padding_16),
+                            shape: BoxShape.rectangle,
+                          ),
+                        ),
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          width: 40,
+                          height: 40,
+                          child: IconButton(
+                            padding: const EdgeInsets.all(8),
+                            onPressed: () {
+                              _images.removeAt(index);
+                              setState(() {});
+                            },
+                            icon: const Icon(Icons.remove_circle),
+                            color: Colors.black54,
+                          ),
+                        ),
+                      ],
                     ),
-                    Positioned(
-                      top: 0,
-                      right: 0,
-                      width: 40,
-                      height: 40,
-                      child: IconButton(
-                        padding: const EdgeInsets.all(8),
-                        onPressed: () {},
-                        icon: const Icon(Icons.remove_circle),
-                        color: Colors.black54,
-                      ),
-                    ),
-                  ],
-                ),
               ),
             ],
           ),

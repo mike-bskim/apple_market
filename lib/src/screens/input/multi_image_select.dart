@@ -1,11 +1,20 @@
+import 'dart:typed_data';
 import 'package:apple_market/src/constants/common_size.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
-class MultiImageSelect extends StatelessWidget {
+class MultiImageSelect extends StatefulWidget {
   const MultiImageSelect({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<MultiImageSelect> createState() => _MultiImageSelectState();
+}
+
+class _MultiImageSelectState extends State<MultiImageSelect> {
+  final List<XFile> _images = [];
 
   @override
   Widget build(BuildContext context) {
@@ -22,23 +31,36 @@ class MultiImageSelect extends StatelessWidget {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(padding_16),
-                child: Container(
-                  width: imgSize,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(padding_16),
-                    border: Border.all(color: Colors.grey, width: 1),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.camera_alt_rounded, color: Colors.grey),
-                      Text('0/10', style: Theme.of(context).textTheme.subtitle2),
-                    ],
+                child: InkWell(
+                  onTap: () async {
+                    final ImagePicker _picker = ImagePicker();
+                    // Pick multiple images
+                    final List<XFile>? images = await _picker.pickMultiImage();
+                    if (images != null && images.isNotEmpty) {
+                      _images.clear();
+                      _images.addAll(images);
+                      // images[0].readAsBytes(), 데이터 타입 확인용
+                      setState(() {});
+                    }
+                  },
+                  child: Container(
+                    width: imgSize,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(padding_16),
+                      border: Border.all(color: Colors.grey, width: 1),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.camera_alt_rounded, color: Colors.grey),
+                        Text('0/10', style: Theme.of(context).textTheme.subtitle2),
+                      ],
+                    ),
                   ),
                 ),
               ),
               ...List.generate(
-                20,
+                _images.length,
                 (index) => Stack(
                   children: <Widget>[
                     Padding(
@@ -47,13 +69,42 @@ class MultiImageSelect extends StatelessWidget {
                         top: padding_16,
                         bottom: padding_16,
                       ),
-                      child: ExtendedImage.network(
-                        'https://picsum.photos/100',
-                        width: imgSize,
-                        height: imgSize,
-                        borderRadius: BorderRadius.circular(padding_16),
-                        shape: BoxShape.rectangle,
-                      ),
+                      // future 타입을 변환해야 함.
+                      child: FutureBuilder<Uint8List>(
+                          future: _images[index].readAsBytes(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return ExtendedImage.memory(
+                                snapshot.data!,
+                                width: imgSize,
+                                height: imgSize,
+                                fit: BoxFit.cover,
+                                loadStateChanged: (state) {
+                                  switch(state.extendedImageLoadState){
+                                    case LoadState.loading:
+                                      return Container(
+                                        width: imgSize,
+                                        height: imgSize,
+                                        padding: const EdgeInsets.all(padding_16*2),
+                                        child: const CircularProgressIndicator(),
+                                      );
+                                      case LoadState.completed:
+                                      return null;
+                                    case LoadState.failed:
+                                      return const Icon(Icons.cancel);
+                                  }
+                                },
+                                borderRadius: BorderRadius.circular(padding_16),
+                                shape: BoxShape.rectangle,
+                              );
+                            } else {
+                              return SizedBox(
+                                width: imgSize,
+                                height: imgSize,
+                                child: const CircularProgressIndicator(),
+                              );
+                            }
+                          }),
                     ),
                     Positioned(
                       top: 0,
@@ -62,8 +113,7 @@ class MultiImageSelect extends StatelessWidget {
                       height: 40,
                       child: IconButton(
                         padding: const EdgeInsets.all(8),
-                        onPressed: () {
-                        },
+                        onPressed: () {},
                         icon: const Icon(Icons.remove_circle),
                         color: Colors.black54,
                       ),

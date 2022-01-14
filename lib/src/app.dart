@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 
 final _routerDelegate = BeamerDelegate(guards: [
   BeamGuard(
-    pathPatterns: ['/'],
+    pathBlueprints: ['/'],
     check: (context, location) {
       return context.watch<UserNotifier>().user != null;
     },

@@ -6,38 +6,43 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class HomeLocation extends BeamLocation<BeamState> {
+class HomeLocation extends BeamLocation {
   @override
   List<BeamPage> buildPages(BuildContext context, BeamState state) {
     // TODO: implement buildPages
-    return [const BeamPage(key: ValueKey('home'), child: HomeScreen())];
+    return [BeamPage(key: const ValueKey('home'), child: const HomeScreen())];
   }
 
   @override
-  // TODO: implement pathPatterns
-  List<Pattern> get pathPatterns => ['/'];
+  List get pathBlueprints => ['/'];
+
+  // @override
+  // // TODO: implement pathPatterns
+  // List<Pattern> get pathPatterns => ['/'];
 }
 
-class InputLocation extends BeamLocation<BeamState> {
-
+class InputLocation extends BeamLocation {
   @override
   Widget builder(BuildContext context, Widget navigator) {
-    return ChangeNotifierProvider.value(value: categoryNotifier,
-    child: super.builder(context, navigator));
+    return ChangeNotifierProvider.value(
+      value: categoryNotifier,
+      child: super.builder(context, navigator),
+    );
   }
+
   @override
   List<BeamPage> buildPages(BuildContext context, BeamState state) {
     // TODO: implement buildPages
     return [
       ...HomeLocation().buildPages(context, state), // 이게 없으면 input 페이지에서 back 버튼이 안생김
-      if (state.pathPatternSegments.contains('input'))
-        const BeamPage(key: ValueKey('input'), child: InputScreen()),
-      if (state.pathPatternSegments.contains('category_input'))
-        const BeamPage(key: ValueKey('category_input'), child: CategoryInputScreen()),
+      if (state.pathBlueprintSegments.contains('input'))
+        BeamPage(key: const ValueKey('input'), child: const InputScreen()),
+      if (state.pathBlueprintSegments.contains('category_input'))
+        BeamPage(key: const ValueKey('category_input'), child: const CategoryInputScreen()),
     ];
   }
 
   @override
   // TODO: implement pathPatterns
-  List<Pattern> get pathPatterns => ['/input', '/input/category_input'];
+  List<String> get pathBlueprints => ['/input', '/input/category_input'];
 }

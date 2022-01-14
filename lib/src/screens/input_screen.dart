@@ -42,7 +42,8 @@ class _InputScreenState extends State<InputScreen> {
         centerTitle: true,
         leading: TextButton(
           onPressed: () {
-            context.beamBack();
+            // context.beamBack();
+            Navigator.of(context).pop();
           },
           style:
               TextButton.styleFrom(backgroundColor: Theme.of(context).appBarTheme.backgroundColor),
@@ -54,7 +55,8 @@ class _InputScreenState extends State<InputScreen> {
         actions: <Widget>[
           TextButton(
             onPressed: () {
-              context.beamBack();
+              // context.beamBack();
+              Navigator.of(context).pop();
             },
             style: TextButton.styleFrom(
                 backgroundColor: Theme.of(context).appBarTheme.backgroundColor),

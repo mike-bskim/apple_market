@@ -60,7 +60,6 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
               onPressed: () {
-                // context.read<UserProvider>().setUserAuth(false);
                 FirebaseAuth.instance.signOut();
               },
               icon: const Icon(Icons.logout)),

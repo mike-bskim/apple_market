@@ -16,19 +16,19 @@ class HomeLocation extends BeamLocation {
   @override
   List get pathBlueprints => ['/'];
 
-  // @override
-  // // TODO: implement pathPatterns
-  // List<Pattern> get pathPatterns => ['/'];
+// @override
+// // TODO: implement pathPatterns
+// List<Pattern> get pathPatterns => ['/'];
 }
 
 class InputLocation extends BeamLocation {
-  @override
-  Widget builder(BuildContext context, Widget navigator) {
-    return ChangeNotifierProvider.value(
-      value: categoryNotifier,
-      child: super.builder(context, navigator),
-    );
-  }
+  // @override
+  // Widget builder(BuildContext context, Widget navigator) {
+  //   return ChangeNotifierProvider.value(
+  //     value: categoryNotifier,
+  //     child: super.builder(context, navigator),
+  //   );
+  // }
 
   @override
   List<BeamPage> buildPages(BuildContext context, BeamState state) {
@@ -36,9 +36,17 @@ class InputLocation extends BeamLocation {
     return [
       ...HomeLocation().buildPages(context, state), // 이게 없으면 input 페이지에서 back 버튼이 안생김
       if (state.pathBlueprintSegments.contains('input'))
-        BeamPage(key: const ValueKey('input'), child: const InputScreen()),
+        // BeamPage(key: const ValueKey('input'), child: const InputScreen()),
+        BeamPage(
+          key: const ValueKey('input'),
+          child: ChangeNotifierProvider.value(value: categoryNotifier, child: const InputScreen()),
+        ),
       if (state.pathBlueprintSegments.contains('category_input'))
-        BeamPage(key: const ValueKey('category_input'), child: const CategoryInputScreen()),
+        // BeamPage(key: const ValueKey('category_input'), child: const CategoryInputScreen()),
+        BeamPage(
+          key: const ValueKey('category_input'),
+          child: ChangeNotifierProvider.value(value: categoryNotifier, child: const CategoryInputScreen()),
+        ),
     ];
   }
 

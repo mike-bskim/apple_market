@@ -1,6 +1,7 @@
 import 'package:apple_market/src/constants/common_size.dart';
 import 'package:apple_market/src/screens/input/multi_image_select.dart';
 import 'package:apple_market/src/states/category_notifier.dart';
+import 'package:apple_market/src/utils/logger.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
@@ -42,8 +43,9 @@ class _InputScreenState extends State<InputScreen> {
         centerTitle: true,
         leading: TextButton(
           onPressed: () {
-            // context.beamBack();
-            Navigator.of(context).pop();
+            logger.d('뒤로가기 버튼 클릭');
+            context.beamBack();
+            // Navigator.of(context).pop();
           },
           style:
               TextButton.styleFrom(backgroundColor: Theme.of(context).appBarTheme.backgroundColor),
@@ -55,8 +57,8 @@ class _InputScreenState extends State<InputScreen> {
         actions: <Widget>[
           TextButton(
             onPressed: () {
-              // context.beamBack();
-              Navigator.of(context).pop();
+              context.beamBack();
+              // Navigator.of(context).pop();
             },
             style: TextButton.styleFrom(
                 backgroundColor: Theme.of(context).appBarTheme.backgroundColor),

@@ -2,6 +2,7 @@ import 'package:apple_market/src/screens/home_screen.dart';
 import 'package:apple_market/src/screens/input/category_input_screen.dart';
 import 'package:apple_market/src/screens/input_screen.dart';
 import 'package:apple_market/src/states/category_notifier.dart';
+import 'package:apple_market/src/states/select_image_notifier.dart';
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,8 +25,11 @@ class HomeLocation extends BeamLocation {
 class InputLocation extends BeamLocation {
   // @override
   // Widget builder(BuildContext context, Widget navigator) {
-  //   return ChangeNotifierProvider.value(
-  //     value: categoryNotifier,
+  //   return MultiProvider(
+  //     providers: [
+  //       ChangeNotifierProvider.value(value: categoryNotifier),
+  //       ChangeNotifierProvider(create: (context) => SelectImageNotifier()),
+  //     ],
   //     child: super.builder(context, navigator),
   //   );
   // }
@@ -37,16 +41,23 @@ class InputLocation extends BeamLocation {
       ...HomeLocation().buildPages(context, state), // 이게 없으면 input 페이지에서 back 버튼이 안생김
       if (state.pathBlueprintSegments.contains('input'))
         // BeamPage(key: const ValueKey('input'), child: const InputScreen()),
-        BeamPage(
-          key: const ValueKey('input'),
-          child: ChangeNotifierProvider.value(value: categoryNotifier, child: const InputScreen()),
+      BeamPage(
+        key: const ValueKey('input'),
+        child: MultiProvider(
+          providers: [
+            ChangeNotifierProvider.value(value: categoryNotifier),
+            ChangeNotifierProvider(create: (context) => SelectImageNotifier()),
+          ],
+          child: const InputScreen(),
         ),
+      ),
       if (state.pathBlueprintSegments.contains('category_input'))
         // BeamPage(key: const ValueKey('category_input'), child: const CategoryInputScreen()),
-        BeamPage(
-          key: const ValueKey('category_input'),
-          child: ChangeNotifierProvider.value(value: categoryNotifier, child: const CategoryInputScreen()),
-        ),
+      BeamPage(
+        key: const ValueKey('category_input'),
+        child: ChangeNotifierProvider.value(
+            value: categoryNotifier, child: const CategoryInputScreen()),
+      ),
     ];
   }
 

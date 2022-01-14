@@ -1,8 +1,9 @@
-import 'dart:typed_data';
 import 'package:apple_market/src/constants/common_size.dart';
+import 'package:apple_market/src/states/select_image_notifier.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class MultiImageSelect extends StatefulWidget {
   const MultiImageSelect({
@@ -14,14 +15,13 @@ class MultiImageSelect extends StatefulWidget {
 }
 
 class _MultiImageSelectState extends State<MultiImageSelect> {
-  final List<Uint8List> _images = [];
-
   bool _isPickingImages = false;
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
+        SelectImageNotifier selectImageNotifier = context.watch<SelectImageNotifier>();
         Size _size = MediaQuery.of(context).size;
         var imgSize = (_size.width / 3) - padding_16 * 2;
 
@@ -42,11 +42,7 @@ class _MultiImageSelectState extends State<MultiImageSelect> {
                     // Pick multiple images
                     final List<XFile>? images = await _picker.pickMultiImage(imageQuality: 10);
                     if (images != null && images.isNotEmpty) {
-                      // images[0].readAsBytes(), 데이터 타입 확인용
-                      _images.clear();
-                      for (var xFile in images) {
-                        _images.add(await xFile.readAsBytes());
-                      }
+                      await context.read<SelectImageNotifier>().setNewImages(images);
                     }
                     _isPickingImages = false;
                     setState(() {});
@@ -73,7 +69,8 @@ class _MultiImageSelectState extends State<MultiImageSelect> {
                 ),
               ),
               ...List.generate(
-                _images.length,
+                selectImageNotifier.images.length,
+                // _images.length,
                 (index) => Stack(
                   children: <Widget>[
                     Padding(
@@ -81,7 +78,7 @@ class _MultiImageSelectState extends State<MultiImageSelect> {
                           right: padding_16, top: padding_16, bottom: padding_16),
                       // future 타입을 변환해야 함.
                       child: ExtendedImage.memory(
-                        _images[index],
+                        selectImageNotifier.images[index],
                         width: imgSize,
                         height: imgSize,
                         fit: BoxFit.cover,
@@ -111,8 +108,7 @@ class _MultiImageSelectState extends State<MultiImageSelect> {
                       child: IconButton(
                         padding: const EdgeInsets.all(8),
                         onPressed: () {
-                          _images.removeAt(index);
-                          setState(() {});
+                          selectImageNotifier.removeImage(index);
                         },
                         icon: const Icon(Icons.remove_circle),
                         color: Colors.black54,

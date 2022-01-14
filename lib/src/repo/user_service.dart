@@ -33,8 +33,8 @@ class UserService {
     // print('documentSnapshot: ${documentSnapshot.reference}');
 
     UserModel userModel = UserModel.fromSnapshot(documentSnapshot);
-    logger.d('--------------------------------------------------');
-    logger.d(userModel.geoFirePoint.latitude, userModel.geoFirePoint.longitude);
+    // logger.d('--------------------------------------------------');
+    // logger.d(userModel.geoFirePoint.latitude, userModel.geoFirePoint.longitude);
 
     return userModel;
   }

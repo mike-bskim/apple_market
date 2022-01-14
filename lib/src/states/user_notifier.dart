@@ -39,8 +39,8 @@ class UserNotifier extends ChangeNotifier {
         userKey: userKey,
         phoneNumber: phoneNumber,
         address: address,
-        // lat: lat,
-        // lon: lon,
+        lat: lat,
+        lon: lon,
         geoFirePoint: GeoFirePoint(lat, lon),
         createdDate: DateTime.now().toUtc(),
       );

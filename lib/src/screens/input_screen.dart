@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:apple_market/src/constants/common_size.dart';
 import 'package:apple_market/src/model/item_model.dart';
+import 'package:apple_market/src/repo/image_storage.dart';
 import 'package:apple_market/src/screens/input/multi_image_select.dart';
 import 'package:apple_market/src/states/category_notifier.dart';
 import 'package:apple_market/src/states/select_image_notifier.dart';
@@ -67,15 +68,8 @@ class _InputScreenState extends State<InputScreen> {
               //context.beamBack();
               // Navigator.of(context).pop();
               List<Uint8List> images = context.read<SelectImageNotifier>().images;
-              var metaData = SettableMetadata(contentType: 'image/jpeg');
-              Reference ref = FirebaseStorage.instance.ref('images/testing/test_image_1.jpg');
-              if(images.isNotEmpty) {
-                await ref.putData(images[0], metaData);
-              }
-              logger.d('uploading done~');
 
-              String _link = await ref.getDownloadURL();
-              logger.d('_link:[$_link]');
+              List<String> downloadUrls = await ImageStorage.uploadImage(images);
 
               // ItemModel itemModel = ItemModel(
               //   itemKey: itemKey,

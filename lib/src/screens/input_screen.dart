@@ -1,4 +1,5 @@
 import 'package:apple_market/src/constants/common_size.dart';
+import 'package:apple_market/src/model/item_model.dart';
 import 'package:apple_market/src/screens/input/multi_image_select.dart';
 import 'package:apple_market/src/states/category_notifier.dart';
 import 'package:apple_market/src/utils/logger.dart';
@@ -57,8 +58,21 @@ class _InputScreenState extends State<InputScreen> {
         actions: <Widget>[
           TextButton(
             onPressed: () {
-              context.beamBack();
+              //context.beamBack();
               // Navigator.of(context).pop();
+              ItemModel itemModel = ItemModel(
+                itemKey: itemKey,
+                userKey: userKey,
+                imageDownloadUrls: imageDownloadUrls,
+                title: title,
+                category: category,
+                price: price,
+                negotiable: negotiable,
+                detail: detail,
+                address: address,
+                geoFirePoint: geoFirePoint,
+                createdDate: createdDate,
+              );
             },
             style: TextButton.styleFrom(
                 backgroundColor: Theme.of(context).appBarTheme.backgroundColor),

@@ -14,8 +14,6 @@ class ImageStorage {
 
     var metaData = SettableMetadata(contentType: 'image/jpeg');
     List<String> downloadUrls = [];
-    // =
-    // logger.d('_link:[$_link]');
 
     for (var i = 0; i < images.length; i++) {
       Reference ref =

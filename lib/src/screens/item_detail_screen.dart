@@ -12,9 +12,11 @@ class ItemDetailScreen extends StatefulWidget {
 class _ItemDetailScreenState extends State<ItemDetailScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.blue,
-      child: Center(child: Text('Item key is ${widget.itemKey}')),
+    return Scaffold(
+      body: Container(
+        color: Colors.blue,
+        child: Center(child: Text('Item key is ${widget.itemKey}')),
+      ),
     );
   }
 }

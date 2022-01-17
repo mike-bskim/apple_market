@@ -84,7 +84,7 @@ class ItemLocation extends BeamLocation {
       if (state.pathParameters.containsKey(LOCATION_ITEM_ID))
         BeamPage(
           key: const ValueKey(LOCATION_ITEM_ID),
-          child: const ItemDetailScreen(LOCATION_ITEM_ID),
+          child: ItemDetailScreen(state.pathParameters[LOCATION_ITEM_ID] ?? ''),
         ),
     ];
   }

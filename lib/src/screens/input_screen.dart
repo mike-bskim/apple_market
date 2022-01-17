@@ -4,6 +4,7 @@ import 'package:apple_market/src/constants/common_size.dart';
 import 'package:apple_market/src/model/item_model.dart';
 import 'package:apple_market/src/repo/image_storage.dart';
 import 'package:apple_market/src/repo/item_service.dart';
+import 'package:apple_market/src/router/locations.dart';
 import 'package:apple_market/src/screens/input/multi_image_select.dart';
 import 'package:apple_market/src/states/category_notifier.dart';
 import 'package:apple_market/src/states/select_image_notifier.dart';
@@ -152,7 +153,7 @@ class _InputScreenState extends State<InputScreen> {
                 // 카타고리 영역
                 ListTile(
                   onTap: () {
-                    context.beamToNamed('/input/category_input');
+                    context.beamToNamed('/$LOCATION_INPUT/$LOCATION_CATEGORY_INPUT');
                   },
                   dense: true,
                   title: Text(context.watch<CategoryNotifier>().currentCategoryInKor),

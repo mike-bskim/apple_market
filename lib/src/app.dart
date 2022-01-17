@@ -5,15 +5,22 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-final _routerDelegate = BeamerDelegate(guards: [
-  BeamGuard(
-    pathBlueprints: ['/'],
-    check: (context, location) {
-      return context.watch<UserNotifier>().user != null;
-    },
-    showPage: BeamPage(child: StartScreen()),
-  )
-], locationBuilder: BeamerLocationBuilder(beamLocations: [HomeLocation(), InputLocation()]));
+final _routerDelegate = BeamerDelegate(
+    guards: [
+      BeamGuard(
+        pathBlueprints: [
+          ...HomeLocation().pathBlueprints,
+          InputLocation().pathBlueprints,
+          ItemLocation().pathBlueprints,
+        ],
+        check: (context, location) {
+          return context.watch<UserNotifier>().user != null;
+        },
+        showPage: BeamPage(child: StartScreen()),
+      )
+    ],
+    locationBuilder:
+        BeamerLocationBuilder(beamLocations: [HomeLocation(), InputLocation(), ItemLocation()]));
 
 class AppleApp extends StatelessWidget {
   const AppleApp({Key? key}) : super(key: key);

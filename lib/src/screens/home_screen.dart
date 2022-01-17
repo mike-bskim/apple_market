@@ -1,3 +1,4 @@
+import 'package:apple_market/src/router/locations.dart';
 import 'package:apple_market/src/screens/home/items_page.dart';
 import 'package:apple_market/src/utils/logger.dart';
 import 'package:apple_market/src/widgets/expandable_fab.dart';
@@ -27,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: <Widget>[
           MaterialButton(
             onPressed: () {
-              context.beamToNamed('/input');
+              context.beamToNamed('/$LOCATION_INPUT');
             },
             shape: const CircleBorder(),
             height: 48,

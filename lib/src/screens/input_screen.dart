@@ -1,12 +1,16 @@
 import 'dart:typed_data';
 
 import 'package:apple_market/src/constants/common_size.dart';
+import 'package:apple_market/src/model/item_model.dart';
 import 'package:apple_market/src/repo/image_storage.dart';
+import 'package:apple_market/src/repo/item_service.dart';
 import 'package:apple_market/src/screens/input/multi_image_select.dart';
 import 'package:apple_market/src/states/category_notifier.dart';
 import 'package:apple_market/src/states/select_image_notifier.dart';
+import 'package:apple_market/src/states/user_notifier.dart';
 import 'package:apple_market/src/utils/logger.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
@@ -34,11 +38,51 @@ class _InputScreenState extends State<InputScreen> {
   bool _suggestPriceSelected = false;
   bool isCreatingItem = false;
   final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _detailController = TextEditingController();
 
   @override
   void dispose() {
     _priceController.dispose();
     super.dispose();
+  }
+
+  void attemptCreateItem() async {
+    if(FirebaseAuth.instance.currentUser == null) return;
+    // 완료 버튼 클릭
+    // Navigator.of(context).pop();
+    isCreatingItem = true;
+    setState(() {});
+
+    final String userKey = FirebaseAuth.instance.currentUser!.uid;
+    final String itemKey = ItemModel.generateItemKey(userKey);
+    List<Uint8List> images = context.read<SelectImageNotifier>().images;
+    List<String> downloadUrls = await ImageStorage.uploadImage(images, itemKey);
+    final num? price = num.tryParse(_priceController.text.replaceAll('.', '').replaceAll(' 원', ''));
+    UserNotifier userNotifier = context.read<UserNotifier>();
+
+    if(userNotifier.userModel == null) {
+      return ;
+    }
+    // logger.d(downloadUrls);
+
+    ItemModel itemModel = ItemModel(
+      itemKey: itemKey,
+      userKey: userKey,
+      imageDownloadUrls: downloadUrls,
+      title: _titleController.text,
+      category: context.read<CategoryNotifier>().currentCategoryInEng,
+      price: price??0,
+      negotiable: _suggestPriceSelected,
+      detail: _detailController.text,
+      address: userNotifier.userModel!.address,
+      geoFirePoint: userNotifier.userModel!.geoFirePoint,
+      createdDate: DateTime.now().toUtc(),
+    );
+
+    await ItemService().createNewItem(itemModel.toJson(), itemKey);
+
+    context.beamBack();
   }
 
   @override
@@ -72,33 +116,7 @@ class _InputScreenState extends State<InputScreen> {
               ),
               actions: <Widget>[
                 TextButton(
-                  onPressed: () async {
-                    // 완료 버튼 클릭
-                    //context.beamBack();
-                    // Navigator.of(context).pop();
-                    isCreatingItem = true;
-                    setState(() {});
-
-                    List<Uint8List> images = context.read<SelectImageNotifier>().images;
-                    List<String> downloadUrls = await ImageStorage.uploadImage(images);
-                    logger.d(downloadUrls);
-
-                    // ItemModel itemModel = ItemModel(
-                    //   itemKey: itemKey,
-                    //   userKey: userKey,
-                    //   imageDownloadUrls: imageDownloadUrls,
-                    //   title: title,
-                    //   category: category,
-                    //   price: price,
-                    //   negotiable: negotiable,
-                    //   detail: detail,
-                    //   address: address,
-                    //   geoFirePoint: geoFirePoint,
-                    //   createdDate: createdDate,
-                    // );
-                    isCreatingItem = false;
-                    setState(() {});
-                  },
+                  onPressed: attemptCreateItem,
                   style: TextButton.styleFrom(
                     primary: Colors.black,
                     backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
@@ -121,6 +139,7 @@ class _InputScreenState extends State<InputScreen> {
                 dividerCustom,
                 // 제목영역
                 TextFormField(
+                  controller: _titleController,
                   decoration: InputDecoration(
                     hintText: '글제목',
                     contentPadding: const EdgeInsets.symmetric(horizontal: padding_16),
@@ -204,6 +223,7 @@ class _InputScreenState extends State<InputScreen> {
                 dividerCustom,
                 // 올릴 게시글 내용을 작성
                 TextFormField(
+                  controller: _detailController,
                   maxLines: null,
                   keyboardType: TextInputType.multiline,
                   decoration: InputDecoration(

@@ -1,5 +1,4 @@
 import 'package:apple_market/src/constants/common_size.dart';
-import 'package:apple_market/src/repo/user_service.dart';
 import 'package:apple_market/src/utils/logger.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -47,7 +46,7 @@ class ItemsPage extends StatelessWidget {
         return InkWell(
           onTap: () {
             logger.d('UserService().firestore >>>');
-            UserService().fireStoreReadTest();
+            // UserService().fireStoreReadTest();
           },
           child: SizedBox(
             height: imgSize,

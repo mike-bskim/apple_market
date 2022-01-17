@@ -72,4 +72,11 @@ class ItemModel {
     // map['reference'] = reference;
     return map;
   }
+  static String generateItemKey(String uid) {
+
+    String timeInMilli = DateTime.now().millisecondsSinceEpoch.toString();
+
+    return '${uid}_$timeInMilli';
+  }
+
 }

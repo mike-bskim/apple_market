@@ -52,6 +52,7 @@ class UserNotifier extends ChangeNotifier {
   }
 
   User? get user => _user;
+  UserModel? get userModel => _userModel;
 
 // 전화인증을 구현 이전, 테스트용 코드
 // bool _userLoggedIn = false;

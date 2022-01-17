@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:apple_market/src/app.dart';
 import 'package:apple_market/src/screens/splash_screen.dart';
 import 'package:apple_market/src/utils/logger.dart';
@@ -41,7 +39,7 @@ class _MyAppState extends State<MyApp> {
 
   StatelessWidget _splashLoadingWidget(AsyncSnapshot<Object> snapshot) {
     if(snapshot.hasError) {
-      log('error occur while loading ~');
+      logger.d('error occur while loading ~');
       return const Text('Error ocure');
     } else if (snapshot.connectionState == ConnectionState.done) {
       return const AppleApp();

@@ -49,50 +49,43 @@ class InputLocation extends BeamLocation {
       ...HomeLocation().buildPages(context, state), // 이게 없으면 input 페이지에서 back 버튼이 안생김
       if (state.pathBlueprintSegments.contains(LOCATION_INPUT))
         // BeamPage(key: const ValueKey('input'), child: const InputScreen()),
-      BeamPage(
-        key: const ValueKey(LOCATION_INPUT),
-        child: MultiProvider(
-          providers: [
-            ChangeNotifierProvider.value(value: categoryNotifier),
-            ChangeNotifierProvider(create: (context) => SelectImageNotifier()),
-          ],
-          child: const InputScreen(),
+        BeamPage(
+          key: const ValueKey(LOCATION_INPUT),
+          child: MultiProvider(
+            providers: [
+              ChangeNotifierProvider.value(value: categoryNotifier),
+              ChangeNotifierProvider(create: (context) => SelectImageNotifier()),
+            ],
+            child: const InputScreen(),
+          ),
         ),
-      ),
       if (state.pathBlueprintSegments.contains(LOCATION_CATEGORY_INPUT))
         // BeamPage(key: const ValueKey('category_input'), child: const CategoryInputScreen()),
-      BeamPage(
-        key: const ValueKey(LOCATION_CATEGORY_INPUT),
-        child: ChangeNotifierProvider.value(
-            value: categoryNotifier, child: const CategoryInputScreen()),
-      ),
+        BeamPage(
+          key: const ValueKey(LOCATION_CATEGORY_INPUT),
+          child: ChangeNotifierProvider.value(
+              value: categoryNotifier, child: const CategoryInputScreen()),
+        ),
     ];
   }
 
   @override
   // TODO: implement pathPatterns
-  List<String> get pathBlueprints => ['/$LOCATION_INPUT', '/$LOCATION_INPUT/$LOCATION_CATEGORY_INPUT'];
+  List<String> get pathBlueprints =>
+      ['/$LOCATION_INPUT', '/$LOCATION_INPUT/$LOCATION_CATEGORY_INPUT'];
 }
 
-
-class ItemLocation extends BeamLocation{
+class ItemLocation extends BeamLocation {
   @override
   List<BeamPage> buildPages(BuildContext context, BeamState state) {
     // TODO: implement buildPages
     return [
       ...HomeLocation().buildPages(context, state), // 이게 없으면 input 페이지에서 back 버튼이 안생김
       if (state.pathParameters.containsKey(LOCATION_ITEM_ID))
-      BeamPage(key: const ValueKey(LOCATION_ITEM), child: const ItemDetailScreen(LOCATION_ITEM_ID)),
-      //   BeamPage(
-      //     key: const ValueKey('item'),
-      //     child: MultiProvider(
-      //       providers: [
-      //         ChangeNotifierProvider.value(value: categoryNotifier),
-      //         ChangeNotifierProvider(create: (context) => SelectImageNotifier()),
-      //       ],
-      //       child: const InputScreen(),
-      //     ),
-      //   ),
+        BeamPage(
+          key: const ValueKey(LOCATION_ITEM_ID),
+          child: const ItemDetailScreen(LOCATION_ITEM_ID),
+        ),
     ];
   }
 

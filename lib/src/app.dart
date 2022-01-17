@@ -10,8 +10,8 @@ final _routerDelegate = BeamerDelegate(
       BeamGuard(
         pathBlueprints: [
           ...HomeLocation().pathBlueprints,
-          InputLocation().pathBlueprints,
-          ItemLocation().pathBlueprints,
+          ...InputLocation().pathBlueprints,
+          ...ItemLocation().pathBlueprints,
         ],
         check: (context, location) {
           return context.watch<UserNotifier>().user != null;

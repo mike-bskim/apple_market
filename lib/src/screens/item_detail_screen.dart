@@ -14,7 +14,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.blue,
-      child: Text('Item key is ${widget.itemKey}'),
+      child: Center(child: Text('Item key is ${widget.itemKey}')),
     );
   }
 }

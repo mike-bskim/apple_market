@@ -35,12 +35,12 @@ class ItemModel {
     userKey = json['userKey'] ?? '';
     imageDownloadUrls =
         json['imageDownloadUrls'] != null ? json['imageDownloadUrls'].cast<String>() : [];
-    title = json['title']??'';
-    category = json['category']??'';
-    price = json['price']??0;
-    negotiable = json['negotiable']??false;
-    detail = json['detail']??'';
-    address = json['address']??'';
+    title = json['title'] ?? '';
+    category = json['category'] ?? '';
+    price = json['price'] ?? 0;
+    negotiable = json['negotiable'] ?? false;
+    detail = json['detail'] ?? '';
+    address = json['address'] ?? '';
     geoFirePoint = GeoFirePoint(
         (json['geoFirePoint']['geopoint']).latitude, (json['geoFirePoint']['geopoint']).longitude);
     createdDate = json['createdDate'] == null
@@ -49,12 +49,11 @@ class ItemModel {
     // reference = json['reference'];
   }
 
+  ItemModel.fromQuerySnapshot(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
+      : this.fromJson(snapshot.data(), snapshot.id, snapshot.reference);
+
   ItemModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot)
-      : this.fromJson(
-    snapshot.data()!,
-    snapshot.id,
-    snapshot.reference,
-  );
+      : this.fromJson(snapshot.data()!, snapshot.id, snapshot.reference);
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -72,11 +71,10 @@ class ItemModel {
     // map['reference'] = reference;
     return map;
   }
-  static String generateItemKey(String uid) {
 
+  static String generateItemKey(String uid) {
     String timeInMilli = DateTime.now().millisecondsSinceEpoch.toString();
 
     return '${uid}_$timeInMilli';
   }
-
 }

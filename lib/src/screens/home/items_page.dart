@@ -1,4 +1,6 @@
 import 'package:apple_market/src/constants/common_size.dart';
+import 'package:apple_market/src/model/item_model.dart';
+import 'package:apple_market/src/repo/item_service.dart';
 import 'package:apple_market/src/utils/logger.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,34 +17,35 @@ class ItemsPage extends StatelessWidget {
         Size size = MediaQuery.of(context).size;
         final imgSize = size.width / 4;
 
-        return FutureBuilder(
-            future: Future.delayed(const Duration(seconds: 2)),
+        return FutureBuilder<List<ItemModel>>(
+            future: ItemService().getItems(),//Future.delayed(const Duration(seconds: 2)),
             builder: (context, snapshot) {
               return AnimatedSwitcher(
                 duration: const Duration(milliseconds: 1000),
-                child: (snapshot.connectionState != ConnectionState.done)
-                    ? _shimmerListView(imgSize)
-                    : _listView(imgSize),
+                child: (snapshot.hasData && snapshot.data!.isNotEmpty)//(snapshot.connectionState != ConnectionState.done)
+                    ? _listView(imgSize, snapshot.data!)
+                    : _shimmerListView(imgSize),
               );
             });
       },
     );
   }
 
-  ListView _listView(double imgSize) {
+  ListView _listView(double imgSize, List<ItemModel> items) {
     return ListView.separated(
       padding: const EdgeInsets.all(padding_16),
       separatorBuilder: (context, index) {
-        return const Divider(
+        return Divider(
           thickness: 1,
-          color: Colors.black26,
+          color: Colors.grey[200],
           height: padding_16 * 2 + 1,
           indent: padding_16,
           endIndent: padding_16,
         );
       },
-      itemCount: 10,
+      itemCount: items.length,
       itemBuilder: (context, index) {
+        ItemModel _item = items[index];
         return InkWell(
           onTap: () {
             logger.d('UserService().firestore >>>');
@@ -56,7 +59,8 @@ class ItemsPage extends StatelessWidget {
                     height: imgSize,
                     width: imgSize,
                     child: ExtendedImage.network(
-                      'https://picsum.photos/100',
+                      _item.imageDownloadUrls[0],
+                      fit: BoxFit.cover,
                       shape: BoxShape.rectangle,
                       borderRadius: BorderRadius.circular(15.0),
                     )),
@@ -67,9 +71,9 @@ class ItemsPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text('work', style: Theme.of(context).textTheme.subtitle1),
+                      Text(_item.title, style: Theme.of(context).textTheme.subtitle1),
                       Text('53일전', style: Theme.of(context).textTheme.subtitle2),
-                      Text('${index + 5000}원'),
+                      Text('${_item.price.toString()} 원'),
                       Expanded(child: Container()),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,

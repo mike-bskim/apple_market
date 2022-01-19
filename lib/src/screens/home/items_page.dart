@@ -50,8 +50,7 @@ class ItemsPage extends StatelessWidget {
         ItemModel _item = items[index];
         return InkWell(
           onTap: () {
-            logger.d('UserService().firestore >>> /$LOCATION_ITEM/:${_item.itemKey}');
-            // UserService().fireStoreReadTest();
+            // logger.d('UserService().firestore >>> /$LOCATION_ITEM/:${_item.itemKey}');
             context.beamToNamed('/$LOCATION_ITEM/:${_item.itemKey}');
           },
           child: SizedBox(

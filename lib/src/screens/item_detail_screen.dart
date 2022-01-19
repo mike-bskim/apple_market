@@ -76,7 +76,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    logger.d('item detail screen >> build >>> [${widget.itemKey}]');
+    // logger.d('item detail screen >> build >>> [${widget.itemKey}]');
 
     return FutureBuilder<ItemModel>(
       future: ItemService().getItem(widget.itemKey),

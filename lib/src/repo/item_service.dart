@@ -1,5 +1,6 @@
 import 'package:apple_market/src/constants/data_keys.dart';
 import 'package:apple_market/src/model/item_model.dart';
+import 'package:apple_market/src/utils/logger.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ItemService {
@@ -21,7 +22,9 @@ class ItemService {
 
   Future<ItemModel> getItem(String itemKey) async {
     if(itemKey[0] == ':') {
+      String orgItemKey = itemKey;
       itemKey = itemKey.substring(1);
+      logger.d('[${orgItemKey.substring(0,10)}...], ==>> [${itemKey.substring(0,9)}...]');
     }
     DocumentReference<Map<String, dynamic>> docRef =
         FirebaseFirestore.instance.collection(COL_ITEMS).doc(itemKey);

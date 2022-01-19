@@ -15,22 +15,22 @@ const LOCATION_CATEGORY_INPUT = 'category_input';
 const LOCATION_ITEM = 'item';
 const LOCATION_ITEM_ID = 'item_id';
 
-class HomeLocation extends BeamLocation {
+class HomeLocation extends BeamLocation<BeamState> {
   @override
   List<BeamPage> buildPages(BuildContext context, BeamState state) {
     // TODO: implement buildPages
-    return [BeamPage(key: const ValueKey(LOCATION_HOME), child: const HomeScreen())];
+    return [const BeamPage(key: ValueKey(LOCATION_HOME), child: HomeScreen())];
   }
 
   @override
-  List get pathBlueprints => ['/'];
+  List<Pattern> get pathPatterns => ['/'];
 
 // @override
 // // TODO: implement pathPatterns
 // List<Pattern> get pathPatterns => ['/'];
 }
 
-class InputLocation extends BeamLocation {
+class InputLocation extends BeamLocation<BeamState> {
   // @override
   // Widget builder(BuildContext context, Widget navigator) {
   //   return MultiProvider(
@@ -47,7 +47,7 @@ class InputLocation extends BeamLocation {
     // TODO: implement buildPages
     return [
       ...HomeLocation().buildPages(context, state), // 이게 없으면 input 페이지에서 back 버튼이 안생김
-      if (state.pathBlueprintSegments.contains(LOCATION_INPUT))
+      if (state.pathPatternSegments.contains(LOCATION_INPUT))
         // BeamPage(key: const ValueKey('input'), child: const InputScreen()),
         BeamPage(
           key: const ValueKey(LOCATION_INPUT),
@@ -59,7 +59,7 @@ class InputLocation extends BeamLocation {
             child: const InputScreen(),
           ),
         ),
-      if (state.pathBlueprintSegments.contains(LOCATION_CATEGORY_INPUT))
+      if (state.pathPatternSegments.contains(LOCATION_CATEGORY_INPUT))
         // BeamPage(key: const ValueKey('category_input'), child: const CategoryInputScreen()),
         BeamPage(
           key: const ValueKey(LOCATION_CATEGORY_INPUT),
@@ -71,11 +71,11 @@ class InputLocation extends BeamLocation {
 
   @override
   // TODO: implement pathPatterns
-  List<String> get pathBlueprints =>
+  List<Pattern> get pathPatterns =>
       ['/$LOCATION_INPUT', '/$LOCATION_INPUT/$LOCATION_CATEGORY_INPUT'];
 }
 
-class ItemLocation extends BeamLocation {
+class ItemLocation extends BeamLocation<BeamState> {
   @override
   List<BeamPage> buildPages(BuildContext context, BeamState state) {
     // TODO: implement buildPages
@@ -91,5 +91,5 @@ class ItemLocation extends BeamLocation {
 
   @override
   // TODO: implement pathBlueprints
-  List get pathBlueprints => ['/$LOCATION_ITEM/:$LOCATION_ITEM_ID'];
+  List<Pattern> get pathPatterns => ['/$LOCATION_ITEM/:$LOCATION_ITEM_ID'];
 }

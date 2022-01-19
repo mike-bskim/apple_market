@@ -36,8 +36,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   extended_image: ^6.0.1
   logger: ^1.1.0
-#  beamer: ^1.1.0
-  beamer: ^0.14.1
+  beamer: ^1.1.0
+#  beamer: ^0.14.1
   flutter_multi_formatter: ^2.5.1
   provider: ^6.0.2
   dio: ^4.0.4

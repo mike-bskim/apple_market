@@ -93,41 +93,33 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                       expandedHeight: _size.width,
                       pinned: true,
                       flexibleSpace: FlexibleSpaceBar(
-                        background: Stack(
-                          children: [
-                            PageView.builder(
+                        centerTitle: true,
+                        title: SizedBox(
+                          child: SmoothPageIndicator(
                               controller: _pageController,
-                              allowImplicitScrolling: true,
-                              itemBuilder: (BuildContext context, int index) {
-                                return ExtendedImage.network(
-                                  itemModel.imageDownloadUrls[index],
-                                  fit: BoxFit.cover,
-                                  scale: 0.1,
-                                );
-                              },
-                              itemCount: itemModel.imageDownloadUrls.length,
-                            ),
-                            Positioned(
-                              bottom: padding_16,
-                              left: 0,
-                              right: 0,
-                              child: Center(
-                                child: SmoothPageIndicator(
-                                    controller: _pageController,
-                                    // PageController
-                                    count: itemModel.imageDownloadUrls.length,
-                                    effect: WormEffect(
-                                      activeDotColor: Theme.of(context).primaryColor,
-                                      dotColor: Theme.of(context).colorScheme.background,
-                                      radius: 6,
-                                      dotHeight: 12,
-                                      dotWidth: 12,
-                                    ),
-                                    // your preferred effect
-                                    onDotClicked: (index) {}),
+                              // PageController
+                              count: itemModel.imageDownloadUrls.length,
+                              effect: WormEffect(
+                                activeDotColor: Theme.of(context).primaryColor,
+                                dotColor: Theme.of(context).colorScheme.background,
+                                radius: 3,
+                                dotHeight: 6,
+                                dotWidth: 6,
                               ),
-                            )
-                          ],
+                              // your preferred effect
+                              onDotClicked: (index) {}),
+                        ),
+                        background: PageView.builder(
+                          controller: _pageController,
+                          allowImplicitScrolling: true,
+                          itemBuilder: (BuildContext context, int index) {
+                            return ExtendedImage.network(
+                              itemModel.imageDownloadUrls[index],
+                              fit: BoxFit.cover,
+                              scale: 0.1,
+                            );
+                          },
+                          itemCount: itemModel.imageDownloadUrls.length,
                         ),
                       ),
                     ),
@@ -135,7 +127,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                       child: Container(
                         height: _size.height * 2,
                         color: Colors.cyan,
-                        child: Center(child: Text('item key is${widget.itemKey}')),
+                        child: Center(child: Text('item key is ${widget.itemKey}')),
                       ),
                     )
                   ],

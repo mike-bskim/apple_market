@@ -42,7 +42,9 @@ class AppleApp extends StatelessWidget {
             button: TextStyle(color: Colors.white),
             subtitle1: TextStyle(color: Colors.black87, fontSize: 15),
             subtitle2: TextStyle(color: Colors.grey, fontSize: 13),
-            bodyText2: TextStyle(color: Colors.black87, fontSize: 12, fontWeight: FontWeight.w300),
+            // bodyText1: TextStyle(color: Colors.black87, fontSize: 12, fontWeight: FontWeight.w400),
+            bodyText2: TextStyle(color: Colors.black54, fontSize: 11, fontWeight: FontWeight.w100),
+
           ),
           // inputDecorationTheme: const InputDecorationTheme(
           //   enabledBorder: UnderlineInputBorder(

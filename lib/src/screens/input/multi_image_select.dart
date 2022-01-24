@@ -40,7 +40,7 @@ class _MultiImageSelectState extends State<MultiImageSelect> {
 
                     final ImagePicker _picker = ImagePicker();
                     // Pick multiple images
-                    final List<XFile>? images = await _picker.pickMultiImage(imageQuality: 10);
+                    final List<XFile>? images = await _picker.pickMultiImage(imageQuality: 20);
                     if (images != null && images.isNotEmpty) {
                       await context.read<SelectImageNotifier>().setNewImages(images);
                     }

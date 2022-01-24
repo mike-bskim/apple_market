@@ -1,5 +1,7 @@
+import 'package:apple_market/src/constants/common_size.dart';
 import 'package:apple_market/src/model/item_model.dart';
 import 'package:apple_market/src/repo/item_service.dart';
+import 'package:apple_market/src/utils/logger.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -75,7 +77,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
   void initState() {
     _scrollController.addListener(() {
       if (_size == null && _statusBarHeight == null) return;
-      print(
+      logger.d(
           '${_scrollController.offset}, ${_size!.width - kToolbarHeight - _statusBarHeight!}, ${isAppbarCollapsed.toString()}');
 
       if (isAppbarCollapsed) {
@@ -154,13 +156,10 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                             ),
                           ),
                         ),
-                        SliverToBoxAdapter(
-                          child: Container(
-                            height: _size!.height * 2,
-                            color: Colors.cyan,
-                            child: Center(child: Text('item key is ${widget.itemKey}')),
-                          ),
-                        )
+                        SliverList(
+                            delegate: SliverChildListDelegate([
+                          _userSection(),
+                        ]))
                       ],
                     ),
                   ),
@@ -176,12 +175,12 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                           colors: [
-                                  Colors.black45,
-                                  Colors.black38,
-                                  Colors.black26,
-                                  Colors.black12,
-                                  Colors.transparent,
-                                ],
+                            Colors.black45,
+                            Colors.black38,
+                            Colors.black26,
+                            Colors.black12,
+                            Colors.transparent,
+                          ],
                         ),
                       ),
                     ),
@@ -195,9 +194,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                       backgroundColor: Colors.transparent,
                       appBar: AppBar(
                         shadowColor: Colors.transparent,
-                        backgroundColor: isAppbarCollapsed
-                            ? Colors.white
-                            : Colors.transparent,
+                        backgroundColor: isAppbarCollapsed ? Colors.white : Colors.transparent,
                         foregroundColor: isAppbarCollapsed ? Colors.black87 : Colors.white,
                       ),
                     ),
@@ -212,6 +209,89 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
           child: const Center(child: CircularProgressIndicator()),
         );
       },
+    );
+  }
+
+  Widget _userSection() {
+    return Padding(
+      padding: const EdgeInsets.all(padding_08),
+      child: Row(
+        children: [
+          ExtendedImage.network(
+            'https://picsum.photos/50',
+            fit: BoxFit.cover,
+            width: _size!.width / 10,
+            height: _size!.width / 10,
+            shape: BoxShape.circle,
+          ),
+          SizedBox(width: padding_16),
+          SizedBox(
+            height: _size!.width / 10,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '무무',
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+                Text(
+                  '원효로',
+                  style: Theme.of(context).textTheme.bodyText2,
+                ),
+              ],
+            ),
+          ),
+          Expanded(child: Container()),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Row(
+                children: [
+                  SizedBox(
+                    width: 40,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        FittedBox(
+                          child: Text(
+                            '37.3',
+                            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueAccent),
+                          ),
+                        ),
+                        SizedBox(height: 6),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(1),
+                          child: LinearProgressIndicator(
+                            color: Colors.blueAccent,
+                            value: 0.365,
+                            minHeight: 3,
+                            backgroundColor: Colors.grey[200],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  const ImageIcon(
+                    ExtendedAssetImageProvider('assets/imgs/happiness.png'),
+                    color: Colors.blue,
+                  ),
+                ],
+              ),
+              SizedBox(height: padding_08),
+              Text(
+                '매너온도',
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText2!
+                    .copyWith(decoration: TextDecoration.underline),
+              ),
+            ],
+          ),
+          // Text('aaa'),
+        ],
+      ),
     );
   }
 }

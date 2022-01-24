@@ -108,7 +108,7 @@ class _InputScreenState extends State<InputScreen> {
                 ),
                 child: Text(
                   '뒤로',
-                  style: Theme.of(context).textTheme.bodyText2,
+                  style: Theme.of(context).textTheme.bodyText1,
                 ),
               ),
               bottom: PreferredSize(
@@ -124,7 +124,7 @@ class _InputScreenState extends State<InputScreen> {
                   ),
                   child: Text(
                     '완료',
-                    style: Theme.of(context).textTheme.bodyText2,
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ),
               ],

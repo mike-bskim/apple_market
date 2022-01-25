@@ -1,10 +1,13 @@
 import 'package:apple_market/src/constants/common_size.dart';
 import 'package:apple_market/src/model/item_model.dart';
+import 'package:apple_market/src/model/user_model.dart';
 import 'package:apple_market/src/repo/item_service.dart';
 import 'package:apple_market/src/screens/item/similar_item.dart';
+import 'package:apple_market/src/states/user_notifier.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:provider/provider.dart';
 
 class ItemDetailScreen extends StatefulWidget {
   final String itemKey;
@@ -72,7 +75,11 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
       future: ItemService().getItem(widget.itemKey),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+          // FutureBuilder 의 snapshot 에서 게시글 데이터 가져오기
           ItemModel itemModel = snapshot.data!;
+          // provider 입포트하고 고객 데이터 가져오기
+          UserModel userModel = context.read<UserNotifier>().userModel!;
+
           return LayoutBuilder(
             builder: (context, constraints) {
               _size = MediaQuery.of(context).size;
@@ -143,7 +150,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                           padding: const EdgeInsets.all(padding_16),
                           sliver: SliverList(
                             delegate: SliverChildListDelegate([
-                              _userSection(),
+                              _userSection(userModel),
                               _divider(padding_16 * 2 + 1),
                               Text(
                                 '카즈미 캠핑키진 툴',
@@ -330,7 +337,11 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     );
   }
 
-  Widget _userSection() {
+  Widget _userSection(UserModel _userModel) {
+    int phoneCnt = _userModel.phoneNumber.length;
+    //[서울특별시, 용산구, 원효로71길, 11, (원효로2가)]
+    List _address = _userModel.address.split(' ');
+
     return Row(
       children: [
         ExtendedImage.network(
@@ -348,11 +359,11 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '무무',
+                _userModel.phoneNumber.substring(phoneCnt-4).toString(),
                 style: Theme.of(context).textTheme.bodyText1,
               ),
               Text(
-                '원효로',
+                _address[2],
                 style: Theme.of(context).textTheme.bodyText2,
               ),
             ],

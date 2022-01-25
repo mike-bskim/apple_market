@@ -39,8 +39,8 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
   void initState() {
     _scrollController.addListener(() {
       if (_size == null && _statusBarHeight == null) return;
-      logger.d(
-          '${_scrollController.offset}, ${_size!.width - kToolbarHeight - _statusBarHeight!}, ${isAppbarCollapsed.toString()}');
+      // logger.d(
+      //     '${_scrollController.offset}, ${_size!.width - kToolbarHeight - _statusBarHeight!}, ${isAppbarCollapsed.toString()}');
 
       if (isAppbarCollapsed) {
         if (_scrollController.offset < _size!.width - kToolbarHeight - _statusBarHeight!) {
@@ -193,9 +193,44 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                                 ),
                               ),
                               _divider(2),
+                              // 판매자의 다른 상품 보기
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '무무님의 판매 상품',
+                                    style: Theme.of(context).textTheme.bodyText1,
+                                  ),
+                                  SizedBox(
+                                    width: _size!.width / 4,
+                                    child: MaterialButton(
+                                      // padding: EdgeInsets.zero,
+                                      onPressed: () {},
+                                      child: Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Text(
+                                          '더보기',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .button!
+                                              .copyWith(color: Colors.grey),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ]),
                           ),
-                        )
+                        ),
+                        SliverGrid.count(
+                            crossAxisCount: 2,
+                            children: List.generate(
+                              10,
+                              (index) => Container(
+                                color: Colors.accents[index],
+                              ),
+                            ))
                       ],
                     ),
                   ),

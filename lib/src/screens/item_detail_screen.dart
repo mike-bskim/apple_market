@@ -1,7 +1,7 @@
 import 'package:apple_market/src/constants/common_size.dart';
 import 'package:apple_market/src/model/item_model.dart';
 import 'package:apple_market/src/repo/item_service.dart';
-import 'package:apple_market/src/utils/logger.dart';
+import 'package:apple_market/src/screens/item/similar_item.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -223,14 +223,18 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                             ]),
                           ),
                         ),
-                        SliverGrid.count(
-                            crossAxisCount: 2,
-                            children: List.generate(
-                              10,
-                              (index) => Container(
-                                color: Colors.accents[index],
-                              ),
-                            ))
+                        SliverPadding(
+                          padding: EdgeInsets.all(padding_08),
+                          sliver: SliverGrid.count(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: padding_08,
+                              crossAxisSpacing: padding_08,
+                              childAspectRatio: 6 / 7,
+                              children: List.generate(
+                                10,
+                                (index) => SimilarItem(),
+                              )),
+                        )
                       ],
                     ),
                   ),

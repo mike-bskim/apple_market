@@ -72,6 +72,14 @@ class ItemModel {
     return map;
   }
 
+  Map<String, dynamic> toMinJson() {
+    final map = <String, dynamic>{};
+    map['imageDownloadUrls'] = imageDownloadUrls.sublist(0, 1);
+    map['title'] = title;
+    map['price'] = price;
+    return map;
+  }
+
   static String generateItemKey(String uid) {
     String timeInMilli = DateTime.now().millisecondsSinceEpoch.toString();
 

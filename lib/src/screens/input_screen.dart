@@ -81,7 +81,7 @@ class _InputScreenState extends State<InputScreen> {
       createdDate: DateTime.now().toUtc(),
     );
 
-    await ItemService().createNewItem(itemModel.toJson(), itemKey);
+    await ItemService().createNewItem(itemModel, itemKey, userNotifier.user!.uid);
 
     context.beamBack();
   }

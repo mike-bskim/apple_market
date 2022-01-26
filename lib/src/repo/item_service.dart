@@ -10,13 +10,22 @@ class ItemService {
 
   ItemService._internal();
 
-  Future createNewItem(Map<String, dynamic> json, String itemKey) async {
-    DocumentReference<Map<String, dynamic>> docRef =
+  Future createNewItem(ItemModel itemModel, String itemKey, String userKey) async {
+
+    DocumentReference<Map<String, dynamic>> itemDocRef =
         FirebaseFirestore.instance.collection(COL_ITEMS).doc(itemKey);
-    final DocumentSnapshot documentSnapshot = await docRef.get();
+    final DocumentSnapshot documentSnapshot = await itemDocRef.get();
+
+    DocumentReference<Map<String, dynamic>> userItemDocRef =
+    FirebaseFirestore.instance.collection(COL_USERS).doc(userKey).collection(COL_USER_ITEMS).doc(itemKey);
 
     if (!documentSnapshot.exists) {
-      await docRef.set(json);
+      // await itemDocRef.set(json);
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        transaction.set(itemDocRef, itemModel.toJson());
+        transaction.set(userItemDocRef, itemModel.toMinJson());
+      });
+
     }
   }
 

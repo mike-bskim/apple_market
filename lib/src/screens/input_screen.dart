@@ -59,7 +59,8 @@ class _InputScreenState extends State<InputScreen> {
     final String itemKey = ItemModel.generateItemKey(userKey);
     List<Uint8List> images = context.read<SelectImageNotifier>().images;
     List<String> downloadUrls = await ImageStorage.uploadImage(images, itemKey);
-    final num? price = num.tryParse(_priceController.text.replaceAll('.', '').replaceAll(' 원', ''));
+    // final num? price = num.tryParse(_priceController.text.replaceAll('.', '').replaceAll(' 원', ''));
+    final num? price = num.tryParse(_priceController.text.replaceAll(RegExp(r'\D'), ''));
     UserNotifier userNotifier = context.read<UserNotifier>();
 
     if(userNotifier.userModel == null) {

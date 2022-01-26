@@ -2,6 +2,7 @@ import 'package:apple_market/src/constants/common_size.dart';
 import 'package:apple_market/src/model/item_model.dart';
 import 'package:apple_market/src/repo/item_service.dart';
 import 'package:apple_market/src/router/locations.dart';
+import 'package:apple_market/src/utils/time_calculation.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -73,7 +74,10 @@ class ItemsPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(_item.title, style: Theme.of(context).textTheme.subtitle1),
-                      Text('53일전', style: Theme.of(context).textTheme.subtitle2),
+                      Text(
+                        TimeCalculation.getTimeDiff(_item.createdDate),
+                        style: Theme.of(context).textTheme.subtitle2,
+                      ),
                       Text('${_item.price.toString()} 원'),
                       Expanded(child: Container()),
                       Row(

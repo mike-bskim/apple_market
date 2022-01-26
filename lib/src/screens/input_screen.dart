@@ -56,6 +56,7 @@ class _InputScreenState extends State<InputScreen> {
     setState(() {});
 
     final String userKey = FirebaseAuth.instance.currentUser!.uid;
+    final String userPhone = FirebaseAuth.instance.currentUser!.phoneNumber!;
     final String itemKey = ItemModel.generateItemKey(userKey);
     List<Uint8List> images = context.read<SelectImageNotifier>().images;
     List<String> downloadUrls = await ImageStorage.uploadImage(images, itemKey);
@@ -71,6 +72,7 @@ class _InputScreenState extends State<InputScreen> {
     ItemModel itemModel = ItemModel(
       itemKey: itemKey,
       userKey: userKey,
+      userPhone: userPhone,
       imageDownloadUrls: downloadUrls,
       title: _titleController.text,
       category: context.read<CategoryNotifier>().currentCategoryInEng,

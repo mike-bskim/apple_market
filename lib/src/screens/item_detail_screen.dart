@@ -158,7 +158,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                           padding: const EdgeInsets.all(padding_16),
                           sliver: SliverList(
                             delegate: SliverChildListDelegate([
-                              _userSection(userModel),
+                              _userSection(itemModel),
                               _divider(padding_16 * 2 + 1),
                               Text(
                                 itemModel.title,
@@ -348,10 +348,19 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     );
   }
 
-  Widget _userSection(UserModel _userModel) {
-    int phoneCnt = _userModel.phoneNumber.length;
+  Widget _userSection(ItemModel _itemModel) {
+    int phoneCnt = _itemModel.userPhone.length;
     //[서울특별시, 용산구, 원효로71길, 11, (원효로2가)]
-    List _address = _userModel.address.split(' ');
+    //[서울특별시, 중구, 태평로1가, 31]
+    List _address = _itemModel.address.split(' ');
+    String _detail = _address[_address.length-1];
+    String _location = '';
+
+    if(_detail.contains('(') && _detail.contains(')')){
+      _location = _detail.replaceAll('(', '').replaceAll(')', '');
+    } else {
+      _location = _address[2];
+    }
 
     return Row(
       children: [
@@ -370,11 +379,11 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                _userModel.phoneNumber.substring(phoneCnt - 4).toString(),
+                _itemModel.userPhone.substring(phoneCnt - 4).toString(),
                 style: Theme.of(context).textTheme.bodyText1,
               ),
               Text(
-                _address[2],
+                _location,
                 style: Theme.of(context).textTheme.bodyText2,
               ),
             ],

@@ -4,6 +4,7 @@ import 'package:geoflutterfire/geoflutterfire.dart';
 class ItemModel {
   late String itemKey;
   late String userKey;
+  late String userPhone;
   late List<String> imageDownloadUrls;
   late String title;
   late String category;
@@ -18,6 +19,7 @@ class ItemModel {
   ItemModel({
     required this.itemKey,
     required this.userKey,
+    required this.userPhone,
     required this.imageDownloadUrls,
     required this.title,
     required this.category,
@@ -33,6 +35,7 @@ class ItemModel {
   ItemModel.fromJson(Map<String, dynamic> json, this.itemKey, this.reference) {
     // itemKey = json['itemKey'] ?? '';
     userKey = json['userKey'] ?? '';
+    userPhone = json['userPhone'] ?? '';
     imageDownloadUrls =
         json['imageDownloadUrls'] != null ? json['imageDownloadUrls'].cast<String>() : [];
     title = json['title'] ?? '';
@@ -59,6 +62,7 @@ class ItemModel {
     final map = <String, dynamic>{};
     map['itemKey'] = itemKey;
     map['userKey'] = userKey;
+    map['userPhone'] = userPhone;
     map['imageDownloadUrls'] = imageDownloadUrls;
     map['title'] = title;
     map['category'] = category;

@@ -3,7 +3,10 @@ import 'package:apple_market/src/model/item_model.dart';
 import 'package:apple_market/src/model/user_model.dart';
 import 'package:apple_market/src/repo/item_service.dart';
 import 'package:apple_market/src/screens/item/similar_item.dart';
+import 'package:apple_market/src/states/category_notifier.dart';
 import 'package:apple_market/src/states/user_notifier.dart';
+import 'package:apple_market/src/utils/logger.dart';
+import 'package:apple_market/src/utils/time_calculation.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -120,12 +123,17 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    '4000원',
+                                    itemModel.price.toString(),
                                     style: Theme.of(context).textTheme.bodyText1,
                                   ),
                                   Text(
-                                    '가격제안불가',
-                                    style: Theme.of(context).textTheme.bodyText2,
+                                    itemModel.negotiable ? '가격제안가능' : '가격제안불가',
+                                    style: itemModel.negotiable
+                                        ? Theme.of(context)
+                                            .textTheme
+                                            .bodyText2!
+                                            .copyWith(color: Colors.blue)
+                                        : Theme.of(context).textTheme.bodyText2,
                                   ),
                                 ],
                               ),
@@ -153,29 +161,28 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                               _userSection(userModel),
                               _divider(padding_16 * 2 + 1),
                               Text(
-                                '카즈미 캠핑키진 툴',
+                                itemModel.title,
                                 style: Theme.of(context).textTheme.headline6,
                               ),
                               _textGap,
                               Row(
                                 children: [
                                   Text(
-                                    '스포츠/레저',
+                                    categoriesMapEngToKor[itemModel.category] ?? '선택',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyText2!
                                         .copyWith(decoration: TextDecoration.underline),
                                   ),
                                   Text(
-                                    ' · 2분전',
+                                    ' · ${TimeCalculation.getTimeDiff(itemModel.createdDate)}',
                                     style: Theme.of(context).textTheme.bodyText2,
                                   ),
                                 ],
                               ),
                               _textGap,
                               Text(
-                                '한번사용했어요\n'
-                                '흠집이나 하자없고 깨긋합니다',
+                                itemModel.detail,
                                 style: Theme.of(context).textTheme.bodyText1,
                               ),
                               _textGap,
@@ -187,7 +194,11 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                               _divider(2),
                               MaterialButton(
                                 padding: EdgeInsets.zero,
-                                onPressed: () {},
+                                onPressed: () {
+                                  // 이메일로 처리하고 싶으면 flutter_email_sender 참고할 것
+                                  // https://pub.dev/packages/flutter_email_sender
+                                  logger.d('게시글을 신고합니다');
+                                },
                                 child: const Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
@@ -205,7 +216,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    '무무님의 판매 상품',
+                                    '판매자의 다른 상품',
                                     style: Theme.of(context).textTheme.bodyText1,
                                   ),
                                   SizedBox(
@@ -231,7 +242,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                           ),
                         ),
                         SliverPadding(
-                          padding: EdgeInsets.all(padding_08),
+                          padding: const EdgeInsets.all(padding_08),
                           sliver: SliverGrid.count(
                               crossAxisCount: 2,
                               mainAxisSpacing: padding_08,
@@ -239,7 +250,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                               childAspectRatio: 6 / 7,
                               children: List.generate(
                                 10,
-                                (index) => SimilarItem(),
+                                (index) => const SimilarItem(),
                               )),
                         )
                       ],
@@ -359,7 +370,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                _userModel.phoneNumber.substring(phoneCnt-4).toString(),
+                _userModel.phoneNumber.substring(phoneCnt - 4).toString(),
                 style: Theme.of(context).textTheme.bodyText1,
               ),
               Text(

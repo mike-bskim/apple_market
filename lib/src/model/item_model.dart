@@ -44,8 +44,10 @@ class ItemModel {
     negotiable = json['negotiable'] ?? false;
     detail = json['detail'] ?? '';
     address = json['address'] ?? '';
-    geoFirePoint = GeoFirePoint(
-        (json['geoFirePoint']['geopoint']).latitude, (json['geoFirePoint']['geopoint']).longitude);
+    geoFirePoint = json['geoFirePoint'] == null
+        ? GeoFirePoint(0, 0)
+        : GeoFirePoint((json['geoFirePoint']['geopoint']).latitude,
+            (json['geoFirePoint']['geopoint']).longitude);
     createdDate = json['createdDate'] == null
         ? DateTime.now().toUtc()
         : (json['createdDate'] as Timestamp).toDate();

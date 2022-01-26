@@ -46,7 +46,7 @@ class ItemService {
 
   Future<List<ItemModel>> getItems() async {
     CollectionReference<Map<String, dynamic>> collectionReference =
-        FirebaseFirestore.instance.collection(COL_ITEMS);
+    FirebaseFirestore.instance.collection(COL_ITEMS);
     QuerySnapshot<Map<String, dynamic>> snapshots = await collectionReference.get();
     List<ItemModel> items = [];
 
@@ -57,4 +57,22 @@ class ItemService {
 
     return items;
   }
+
+  Future<List<ItemModel>> getUserItems(String userKey, {String? itemKey}) async {
+    CollectionReference<Map<String, dynamic>> collectionReference =
+    FirebaseFirestore.instance.collection(COL_USERS).doc(userKey).collection(COL_USER_ITEMS);
+    QuerySnapshot<Map<String, dynamic>> snapshots = await collectionReference.get();
+    List<ItemModel> items = [];
+
+    for (var snapshot in snapshots.docs) {
+      ItemModel itemModel = ItemModel.fromQuerySnapshot(snapshot);
+      if(itemKey == null || itemModel.itemKey != itemKey){
+        items.add(itemModel);
+      }
+    }
+
+    // logger.d(items[0].toJson());
+    return items;
+  }
+
 }

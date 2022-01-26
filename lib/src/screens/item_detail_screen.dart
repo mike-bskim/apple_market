@@ -212,47 +212,66 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                               ),
                               _divider(2),
                               // 판매자의 다른 상품 보기
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    '판매자의 다른 상품',
-                                    style: Theme.of(context).textTheme.bodyText1,
-                                  ),
-                                  SizedBox(
-                                    width: _size!.width / 4,
-                                    child: MaterialButton(
-                                      // padding: EdgeInsets.zero,
-                                      onPressed: () {},
-                                      child: Align(
-                                        alignment: Alignment.centerRight,
-                                        child: Text(
-                                          '더보기',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .button!
-                                              .copyWith(color: Colors.grey),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
                             ]),
                           ),
                         ),
-                        SliverPadding(
-                          padding: const EdgeInsets.all(padding_08),
-                          sliver: SliverGrid.count(
-                              crossAxisCount: 2,
-                              mainAxisSpacing: padding_08,
-                              crossAxisSpacing: padding_08,
-                              childAspectRatio: 6 / 7,
-                              children: List.generate(
-                                10,
-                                (index) => const SimilarItem(),
-                              )),
-                        )
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: padding_16),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  '판매자의 다른 상품',
+                                  style: Theme.of(context).textTheme.bodyText1,
+                                ),
+                                SizedBox(
+                                  width: _size!.width / 4,
+                                  child: MaterialButton(
+                                    // padding: EdgeInsets.zero,
+                                    onPressed: () {},
+                                    child: Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                        '더보기',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .button!
+                                            .copyWith(color: Colors.grey),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SliverToBoxAdapter(
+                          child: FutureBuilder<List<ItemModel>>(
+                            future: ItemService()
+                                .getUserItems(itemModel.userKey, itemKey: itemModel.itemKey),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(padding_08),
+                                  child: GridView.count(
+                                    padding: const EdgeInsets.symmetric(horizontal: padding_08),
+                                    //EdgeInsets.zero,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    crossAxisCount: 2,
+                                    mainAxisSpacing: padding_08,
+                                    crossAxisSpacing: padding_08,
+                                    childAspectRatio: 6 / 7,
+                                    children: List.generate(snapshot.data!.length,
+                                        (index) => SimilarItem(snapshot.data![index])),
+                                  ),
+                                );
+                              }
+                              return Container();
+                            },
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -353,10 +372,10 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     //[서울특별시, 용산구, 원효로71길, 11, (원효로2가)]
     //[서울특별시, 중구, 태평로1가, 31]
     List _address = _itemModel.address.split(' ');
-    String _detail = _address[_address.length-1];
+    String _detail = _address[_address.length - 1];
     String _location = '';
 
-    if(_detail.contains('(') && _detail.contains(')')){
+    if (_detail.contains('(') && _detail.contains(')')) {
       _location = _detail.replaceAll('(', '').replaceAll(')', '');
     } else {
       _location = _address[2];

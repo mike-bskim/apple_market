@@ -14,14 +14,20 @@ class _MapPageState extends State<MapPage> {
   final MapController _mapController = MapController(location: LatLng(37.566642192, 126.978275264));
 
   Offset? _dragStart;
+  double _scaleData = 1.0;
 
   _scaleStart(ScaleStartDetails details) {
     // print('_scaleStart ${_dragStart.toString()}');
     _dragStart = details.focalPoint;
+    _scaleData = 1.0;
   }
 
   _scaleUpdate(ScaleUpdateDetails details) {
-    // print('_scaleUpdate ${details.focalPoint.toString()}');
+    print('_scaleUpdate ${details.scale.toString()}');
+    var _scaleDiff = details.scale - _scaleData;
+    _scaleData = details.scale;
+    _mapController.zoom += _scaleDiff;
+
     final now = details.focalPoint;
     final diff = now - _dragStart!;
     _dragStart = now;

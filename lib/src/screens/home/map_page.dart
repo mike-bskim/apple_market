@@ -1,10 +1,12 @@
+import 'package:apple_market/src/model/user_model.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:latlng/latlng.dart';
 import 'package:map/map.dart';
 
 class MapPage extends StatefulWidget {
-  const MapPage({Key? key}) : super(key: key);
+  final UserModel _userModel;
+  const MapPage(this._userModel, {Key? key}) : super(key: key);
 
   @override
   _MapPageState createState() => _MapPageState();
@@ -33,6 +35,12 @@ class _MapPageState extends State<MapPage> {
     _dragStart = now;
     _mapController.drag(diff.dx, diff.dy);
     setState(() {});
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
   }
 
   @override

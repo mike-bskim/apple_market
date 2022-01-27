@@ -1,12 +1,15 @@
+import 'package:apple_market/src/model/user_model.dart';
 import 'package:apple_market/src/router/locations.dart';
 import 'package:apple_market/src/screens/home/items_page.dart';
 import 'package:apple_market/src/screens/home/map_page.dart';
+import 'package:apple_market/src/states/user_notifier.dart';
 import 'package:apple_market/src/utils/logger.dart';
 import 'package:apple_market/src/widgets/expandable_fab.dart';
 import 'package:beamer/beamer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -21,6 +24,20 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     logger.d('HomeScreen >> build');
+
+    UserModel _userModel = context.read<UserNotifier>().userModel!;
+    //[서울특별시, 용산구, 원효로71길, 11, (원효로2가)]
+    //[서울특별시, 중구, 태평로1가, 31]
+    List _address = _userModel.address.split(' ');
+    String _detail = _address[_address.length - 1];
+    String _location = '';
+
+    if (_detail.contains('(') && _detail.contains(')')) {
+      _location = _detail.replaceAll('(', '').replaceAll(')', '');
+    } else {
+      _location = _address[2];
+    }
+
 
     return Scaffold(
 
@@ -56,7 +73,8 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         centerTitle: false,
         title: Text(
-          '세종대로',
+          // '세종대로',
+          _location,
           style: Theme.of(context).appBarTheme.titleTextStyle,
         ),
         actions: [
@@ -64,6 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () {
                 logger.d('FirebaseAuth.instance.signOut();');
                 FirebaseAuth.instance.signOut();
+                context.beamToNamed('/');
               },
               icon: const Icon(Icons.logout)),
           IconButton(
@@ -114,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
         index: _bottomSelectedIndex,
         children: <Widget>[
           const ItemsPage(),
-          const MapPage(),
+          MapPage(_userModel),
           Container(color: Colors.accents[2],),
           Container(color: Colors.accents[3],),
         ],

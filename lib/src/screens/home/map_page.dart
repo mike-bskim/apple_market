@@ -1,6 +1,14 @@
+import 'dart:math';
+
+import 'package:apple_market/src/constants/data_keys.dart';
+import 'package:apple_market/src/model/item_model.dart';
 import 'package:apple_market/src/model/user_model.dart';
+import 'package:apple_market/src/states/category_notifier.dart';
+import 'package:apple_market/src/utils/logger.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:latlng/latlng.dart';
 import 'package:map/map.dart';
 
@@ -54,6 +62,9 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     // TODO: implement initState
+    // 테스트용 데이터 강제 입력하는 코드
+    // generateData(widget._userModel.userKey, widget._userModel.geoFirePoint);
+
     _mapController = MapController(
       location:
           LatLng(widget._userModel.geoFirePoint.latitude, widget._userModel.geoFirePoint.longitude),
@@ -111,4 +122,110 @@ class _MapPageState extends State<MapPage> {
       controller: _mapController,
     );
   }
+
+
+
+  Future<List<String>> generateData(
+      String userKey, GeoFirePoint geoFirePoint) async {
+    List<String> itemKeys = [];
+
+    DateTime now = DateTime.now().toUtc();
+    const numOfItem = 20;
+    await FirebaseFirestore.instance.runTransaction((Transaction tx) async {
+      for (int i = 0; i < numOfItem; i++) {
+        final String itemKey = ItemModel.generateItemKey(userKey);
+        logger.d('RandomeData - $itemKey');
+        itemKeys.add(itemKey);
+        final DocumentReference postRef =
+        FirebaseFirestore.instance.collection(COL_ITEMS).doc(itemKey);
+
+        final DocumentReference userItemDocReference = FirebaseFirestore
+            .instance
+            .collection(COL_USERS)
+            .doc(userKey)
+            .collection(COL_USER_ITEMS)
+            .doc(itemKey);
+
+        var rng = Random();
+        GeoPoint geoPoint = geoFirePoint.data['geopoint'];
+        final newGeoData = GeoFirePoint(
+            geoPoint.latitude + (0.001 * (rng.nextInt(100) - 50)),
+            geoPoint.longitude + (0.001 * (rng.nextInt(100) - 50)));
+
+        ItemModel item = ItemModel(
+          userKey: userKey,
+          itemKey: itemKey,
+          userPhone: widget._userModel.phoneNumber, //'+821040155592',
+          imageDownloadUrls: ['https://picsum.photos/200'],
+          title: 'testing + $i',
+          category: categoriesMapEngToKor.keys
+              .elementAt(i % categoriesMapEngToKor.keys.length),
+          price: 100 * i,
+          negotiable: i % 2 == 0,
+          detail: 'testing detail + $i',
+          address: 'testing address + $i',
+          geoFirePoint: newGeoData,
+          createdDate: now.subtract(Duration(days: i)),
+        );
+
+        tx.set(postRef, item.toJson());
+        tx.set(userItemDocReference, item.toMinJson());
+      }
+    });
+    return itemKeys;
+  }
+
+  final List<String> nouns = [
+    'time',
+    'year',
+    'people',
+    'way',
+    'day',
+    'man',
+    'thing',
+    'woman',
+    'life',
+    'child',
+    'world',
+    'school',
+    'state',
+    'family',
+    'student',
+    'group',
+    'country',
+    'problem',
+    'hand',
+    'part',
+    'place',
+    'case',
+    'week',
+    'company',
+    'system',
+    'program',
+    'question',
+    'work',
+    'government',
+    'number',
+    'night',
+    'point',
+    'home',
+    'water',
+    'room',
+    'mother',
+    'area',
+    'money',
+    'story',
+    'fact',
+    'month',
+    'lot',
+    'right',
+    'study',
+    'book',
+    'eye',
+    'job',
+    'word',
+    'business'
+  ];
+
+
 }

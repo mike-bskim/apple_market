@@ -126,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
           index: _bottomSelectedIndex,
           children: <Widget>[
             const ItemsPage(),
-            if (_userModel == null) Container() else MapPage(_userModel),
+            (context.read<UserNotifier>().userModel == null) ? Container() : MapPage(_userModel),
             Container(
               color: Colors.accents[2],
             ),

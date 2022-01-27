@@ -23,7 +23,7 @@ class _MapPageState extends State<MapPage> {
   }
 
   _scaleUpdate(ScaleUpdateDetails details) {
-    print('_scaleUpdate ${details.scale.toString()}');
+    // print('_scaleUpdate ${details.scale.toString()}');
     var _scaleDiff = details.scale - _scaleData;
     _scaleData = details.scale;
     _mapController.zoom += _scaleDiff;

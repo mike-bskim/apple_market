@@ -38,106 +38,102 @@ class _HomeScreenState extends State<HomeScreen> {
       _location = _address[2];
     }
 
-
     return Scaffold(
-
-      floatingActionButton: ExpandableFab(
-        distance: 90,
-        children: <Widget>[
-          MaterialButton(
-            onPressed: () {
-              context.beamToNamed('/$LOCATION_INPUT');
-            },
-            shape: const CircleBorder(),
-            height: 48,
-            color: Theme.of(context).colorScheme.primary,
-            child: const Icon(Icons.edit),
-          ),
-          MaterialButton(
-            onPressed: () {},
-            shape: const CircleBorder(),
-            height: 48,
-            color: Theme.of(context).colorScheme.primary,
-            child: const Icon(Icons.input),
-          ),
-          MaterialButton(
-            onPressed: () {},
-            shape: const CircleBorder(),
-            height: 48,
-            color: Theme.of(context).colorScheme.primary,
-            child: const Icon(Icons.add),
-          ),
-        ],
-
-      ),
-      appBar: AppBar(
-        centerTitle: false,
-        title: Text(
-          // '세종대로',
-          _location,
-          style: Theme.of(context).appBarTheme.titleTextStyle,
-        ),
-        actions: [
-          IconButton(
+        floatingActionButton: ExpandableFab(
+          distance: 90,
+          children: <Widget>[
+            MaterialButton(
               onPressed: () {
-                logger.d('FirebaseAuth.instance.signOut();');
-                FirebaseAuth.instance.signOut();
-                context.beamToNamed('/');
+                context.beamToNamed('/$LOCATION_INPUT');
               },
-              icon: const Icon(Icons.logout)),
-          IconButton(
+              shape: const CircleBorder(),
+              height: 48,
+              color: Theme.of(context).colorScheme.primary,
+              child: const Icon(Icons.edit),
+            ),
+            MaterialButton(
               onPressed: () {},
-              icon: const Icon(CupertinoIcons.search)),
-          IconButton(
+              shape: const CircleBorder(),
+              height: 48,
+              color: Theme.of(context).colorScheme.primary,
+              child: const Icon(Icons.input),
+            ),
+            MaterialButton(
               onPressed: () {},
-              icon: const Icon(CupertinoIcons.text_justify)),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        onTap: (index) {
-          setState(() {
-            _bottomSelectedIndex = index;
-          });
-        },
-        currentIndex: _bottomSelectedIndex,
-        items: [
-          BottomNavigationBarItem(
-            icon: ImageIcon(AssetImage(_bottomSelectedIndex == 0
-                ? 'assets/imgs/house_filled.png'
-                : 'assets/imgs/house.png')),
-            label: 'home',
+              shape: const CircleBorder(),
+              height: 48,
+              color: Theme.of(context).colorScheme.primary,
+              child: const Icon(Icons.add),
+            ),
+          ],
+        ),
+        appBar: AppBar(
+          centerTitle: false,
+          title: Text(
+            // '세종대로',
+            _location,
+            style: Theme.of(context).appBarTheme.titleTextStyle,
           ),
-          BottomNavigationBarItem(
-            icon: ImageIcon(AssetImage(_bottomSelectedIndex == 1
-                ? 'assets/imgs/near-me_filled.png'
-                : 'assets/imgs/near-me.png')),
-            label: 'near',
-          ),
-          BottomNavigationBarItem(
-            icon: ImageIcon(AssetImage(_bottomSelectedIndex == 2
-                ? 'assets/imgs/chat_filled.png'
-                : 'assets/imgs/chat.png')),
-            label: 'chat',
-          ),
-          BottomNavigationBarItem(
-            // backgroundColor: Theme.of(context).bottomNavigationBarTheme.selectedItemColor,
-            icon: ImageIcon(AssetImage(_bottomSelectedIndex == 3
-                ? 'assets/imgs/user_filled.png'
-                : 'assets/imgs/user.png')),
-            label: 'me',
-          ),
-        ],
-      ),
-      body: IndexedStack(
-        index: _bottomSelectedIndex,
-        children: <Widget>[
-          const ItemsPage(),
-          MapPage(_userModel),
-          Container(color: Colors.accents[2],),
-          Container(color: Colors.accents[3],),
-        ],
-      )
-    );
+          actions: [
+            IconButton(
+                onPressed: () {
+                  logger.d('FirebaseAuth.instance.signOut();');
+                  FirebaseAuth.instance.signOut();
+                  context.beamToNamed('/');
+                },
+                icon: const Icon(Icons.logout)),
+            IconButton(onPressed: () {}, icon: const Icon(CupertinoIcons.search)),
+            IconButton(onPressed: () {}, icon: const Icon(CupertinoIcons.text_justify)),
+          ],
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          onTap: (index) {
+            setState(() {
+              _bottomSelectedIndex = index;
+            });
+          },
+          currentIndex: _bottomSelectedIndex,
+          items: [
+            BottomNavigationBarItem(
+              icon: ImageIcon(AssetImage(_bottomSelectedIndex == 0
+                  ? 'assets/imgs/house_filled.png'
+                  : 'assets/imgs/house.png')),
+              label: 'home',
+            ),
+            BottomNavigationBarItem(
+              icon: ImageIcon(AssetImage(_bottomSelectedIndex == 1
+                  ? 'assets/imgs/near-me_filled.png'
+                  : 'assets/imgs/near-me.png')),
+              label: 'near',
+            ),
+            BottomNavigationBarItem(
+              icon: ImageIcon(AssetImage(_bottomSelectedIndex == 2
+                  ? 'assets/imgs/chat_filled.png'
+                  : 'assets/imgs/chat.png')),
+              label: 'chat',
+            ),
+            BottomNavigationBarItem(
+              // backgroundColor: Theme.of(context).bottomNavigationBarTheme.selectedItemColor,
+              icon: ImageIcon(AssetImage(_bottomSelectedIndex == 3
+                  ? 'assets/imgs/user_filled.png'
+                  : 'assets/imgs/user.png')),
+              label: 'me',
+            ),
+          ],
+        ),
+        body: IndexedStack(
+          index: _bottomSelectedIndex,
+          children: <Widget>[
+            const ItemsPage(),
+            if (_userModel == null) Container() else MapPage(_userModel),
+            Container(
+              color: Colors.accents[2],
+            ),
+            Container(
+              color: Colors.accents[3],
+            ),
+          ],
+        ));
   }
 }

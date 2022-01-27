@@ -6,6 +6,7 @@ import 'package:map/map.dart';
 
 class MapPage extends StatefulWidget {
   final UserModel _userModel;
+
   const MapPage(this._userModel, {Key? key}) : super(key: key);
 
   @override
@@ -13,7 +14,7 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  final MapController _mapController = MapController(location: LatLng(37.566642192, 126.978275264));
+  late MapController _mapController;
 
   Offset? _dragStart;
   double _scaleData = 1.0;
@@ -40,6 +41,10 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     // TODO: implement initState
+    _mapController = MapController(
+      location:
+          LatLng(widget._userModel.geoFirePoint.latitude, widget._userModel.geoFirePoint.longitude),
+    );
     super.initState();
   }
 

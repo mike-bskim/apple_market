@@ -1,5 +1,6 @@
 import 'package:apple_market/src/router/locations.dart';
 import 'package:apple_market/src/screens/home/items_page.dart';
+import 'package:apple_market/src/screens/home/map_page.dart';
 import 'package:apple_market/src/utils/logger.dart';
 import 'package:apple_market/src/widgets/expandable_fab.dart';
 import 'package:beamer/beamer.dart';
@@ -113,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
         index: _bottomSelectedIndex,
         children: <Widget>[
           const ItemsPage(),
-          Container(color: Colors.accents[1],),
+          const MapPage(),
           Container(color: Colors.accents[2],),
           Container(color: Colors.accents[3],),
         ],

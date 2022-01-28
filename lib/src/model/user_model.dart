@@ -1,3 +1,4 @@
+import 'package:apple_market/src/constants/data_keys.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 
@@ -23,16 +24,16 @@ class UserModel {
   });
 
   UserModel.fromJson(Map<String, dynamic> json, this.userKey, this.reference) {
-    userKey = json['userKey'];
-    phoneNumber = json['phoneNumber'];
-    address = json['address'];
-    lat = json['lat'];
-    lon = json['lon'];
+    userKey = json[DOC_USERKEY];
+    phoneNumber = json[DOC_PHONENUMBER];
+    address = json[DOC_ADDRESS];
+    lat = json[DOC_LAT];
+    lon = json[DOC_LON];
     geoFirePoint = GeoFirePoint(
-        (json['geoFirePoint']['geopoint']).latitude, (json['geoFirePoint']['geopoint']).longitude);
-    createdDate = json['createdDate'] == null
+        (json[DOC_GEOFIREPOINT][DOC_GEOPOINT]).latitude, (json[DOC_GEOFIREPOINT][DOC_GEOPOINT]).longitude);
+    createdDate = json[DOC_CREATEDDATE] == null
         ? DateTime.now().toUtc()
-        : (json['createdDate'] as Timestamp).toDate();
+        : (json[DOC_CREATEDDATE] as Timestamp).toDate();
   }
 
   UserModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot)
@@ -44,13 +45,13 @@ class UserModel {
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['userKey'] = userKey;
-    map['phoneNumber'] = phoneNumber;
-    map['address'] = address;
-    map['lat'] = lat;
-    map['lon'] = lon;
-    map['geoFirePoint'] = geoFirePoint.data;
-    map['createdDate'] = createdDate;
+    map[DOC_USERKEY] = userKey;
+    map[DOC_PHONENUMBER] = phoneNumber;
+    map[DOC_ADDRESS] = address;
+    map[DOC_LAT] = lat;
+    map[DOC_LON] = lon;
+    map[DOC_GEOFIREPOINT] = geoFirePoint.data;
+    map[DOC_CREATEDDATE] = createdDate;
     // map['reference'] = reference;
     return map;
   }

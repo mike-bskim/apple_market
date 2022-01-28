@@ -24,13 +24,6 @@ class UserService {
     FirebaseFirestore.instance.collection(COL_USERS).doc(userKey);
     final DocumentSnapshot<Map<String, dynamic>> documentSnapshot = await docRef.get();
 
-    // var temp = documentSnapshot.data();
-    // print('documentSnapshot: ${temp!['address']}');
-    // print('documentSnapshot: ${documentSnapshot['address']}');
-    // print('documentSnapshot: ${temp['createdDate']}');
-    // print('documentSnapshot: ${documentSnapshot.id}');
-    // print('documentSnapshot: ${documentSnapshot.reference}');
-
     UserModel userModel = UserModel.fromSnapshot(documentSnapshot);
     // logger.d('--------------------------------------------------');
     // logger.d(userModel.geoFirePoint.latitude, userModel.geoFirePoint.longitude);

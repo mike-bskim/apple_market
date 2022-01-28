@@ -1,3 +1,4 @@
+import 'package:apple_market/src/constants/data_keys.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 
@@ -51,25 +52,25 @@ class ChatroomModel {
       this.reference});
 
   ChatroomModel.fromJson(Map<String, dynamic> json, this.chatroomKey, this.reference) {
-    itemImage = json['itemImage']??'';
-    itemTitle = json['itemTitle']??'';
-    itemKey = json['itemKey']??'';
-    itemAddress = json['itemAddress']??'';
-    itemPrice = json['itemPrice']??0;
-    sellerKey = json['sellerKey']??'';
-    buyerKey = json['buyerKey']??'';
-    sellerImage = json['sellerImage']??'';
-    buyerImage = json['buyerImage']??'';
-    geoFirePoint = json['geoFirePoint'] == null
+    itemImage = json[DOC_ITEMIMAGE]??'';
+    itemTitle = json[DOC_ITEMTITLE]??'';
+    itemKey = json[DOC_ITEMKEY]??'';
+    itemAddress = json[DOC_ITEMADDRESS]??'';
+    itemPrice = json[DOC_ITEMPRICE]??0;
+    sellerKey = json[DOC_SELLERKEY]??'';
+    buyerKey = json[DOC_BUYERKEY]??'';
+    sellerImage = json[DOC_SELLERIMAGE]??'';
+    buyerImage = json[DOC_BUYERIMAGE]??'';
+    geoFirePoint = json[DOC_GEOFIREPOINT] == null
         ? GeoFirePoint(0, 0)
-        : GeoFirePoint((json['geoFirePoint']['geopoint']).latitude,
-        (json['geoFirePoint']['geopoint']).longitude);
-    lastMsg = json['lastMsg']??'';
-    lastMsgTime = json['lastMsgTime'] == null
+        : GeoFirePoint((json[DOC_GEOFIREPOINT][DOC_GEOPOINT]).latitude,
+        (json[DOC_GEOFIREPOINT][DOC_GEOPOINT]).longitude);
+    lastMsg = json[DOC_LASTMSG]??'';
+    lastMsgTime = json[DOC_LASTMSGTIME] == null
         ? DateTime.now().toUtc()
-        : (json['lastMsgTime'] as Timestamp).toDate();;
-    lastMsgUserKey = json['lastMsgUserKey']??'';
-    chatroomKey = json['chatroomKey']??'';
+        : (json[DOC_LASTMSGTIME] as Timestamp).toDate();
+    lastMsgUserKey = json[DOC_LASTMSGUSERKEY]??'';
+    chatroomKey = json[DOC_CHATROOMKEY]??'';
   }
 
     ChatroomModel.fromQuerySnapshot(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
@@ -84,20 +85,20 @@ class ChatroomModel {
 
     Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['itemImage'] = itemImage;
-    map['itemTitle'] = itemTitle;
-    map['itemKey'] = itemKey;
-    map['itemAddress'] = itemAddress;
-    map['itemPrice'] = itemPrice;
-    map['sellerKey'] = sellerKey;
-    map['buyerKey'] = buyerKey;
-    map['sellerImage'] = sellerImage;
-    map['buyerImage'] = buyerImage;
-    map['geoFirePoint'] = geoFirePoint.data;
-    map['lastMsg'] = lastMsg;
-    map['lastMsgTime'] = lastMsgTime;
-    map['lastMsgUserKey'] = lastMsgUserKey;
-    map['chatroomKey'] = chatroomKey;
+    map[DOC_ITEMIMAGE] = itemImage;
+    map[DOC_ITEMTITLE] = itemTitle;
+    map[DOC_ITEMKEY] = itemKey;
+    map[DOC_ITEMADDRESS] = itemAddress;
+    map[DOC_ITEMPRICE] = itemPrice;
+    map[DOC_SELLERKEY] = sellerKey;
+    map[DOC_BUYERKEY] = buyerKey;
+    map[DOC_SELLERIMAGE] = sellerImage;
+    map[DOC_BUYERIMAGE] = buyerImage;
+    map[DOC_GEOFIREPOINT] = geoFirePoint.data;
+    map[DOC_LASTMSG] = lastMsg;
+    map[DOC_LASTMSGTIME] = lastMsgTime;
+    map[DOC_LASTMSGUSERKEY] = lastMsgUserKey;
+    map[DOC_CHATROOMKEY] = chatroomKey;
     return map;
   }
 

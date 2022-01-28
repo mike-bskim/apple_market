@@ -31,3 +31,5 @@ const DOC_LASTMSG = 'lastMsg';
 const DOC_LASTMSGTIME = 'lastMsgTime';
 const DOC_LASTMSGUSERKEY = 'lastMsgUserKey';
 const DOC_CHATROOMKEY = 'chatroomKey';
+const DOC_CHATKEY = 'chatKey';
+const DOC_MSG = 'msg';

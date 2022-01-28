@@ -1,10 +1,12 @@
 import 'package:apple_market/src/model/item_model.dart';
 import 'package:apple_market/src/model/user_model.dart';
 import 'package:apple_market/src/repo/item_service.dart';
+import 'package:apple_market/src/router/locations.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:latlng/latlng.dart';
 import 'package:map/map.dart';
+import 'package:beamer/beamer.dart';
 
 class MapPage extends StatefulWidget {
   final UserModel _userModel;
@@ -53,6 +55,25 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
+  Widget _buildImgWidget(Offset offset, ItemModel itemModel) {
+    return Positioned(
+      left: offset.dx,
+      top: offset.dy,
+      width: 32,
+      height: 32,
+      child: InkWell(
+        onTap: () {
+          context.beamToNamed('/$LOCATION_ITEM/:${itemModel.itemKey}');
+        },
+        child: ExtendedImage.network(
+          itemModel.imageDownloadUrls[0],
+          shape: BoxShape.circle,
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -95,7 +116,8 @@ class _MapPageState extends State<MapPage> {
                 for (var item in snapshot.data!) {
                   final offset = transformer.fromLatLngToXYCoords(
                       LatLng(item.geoFirePoint.latitude, item.geoFirePoint.longitude));
-                  nearByItems.add(_buildMarkerWidget(offset));
+                  // nearByItems.add(_buildMarkerWidget(offset));
+                  nearByItems.add(_buildImgWidget(offset, item));
                 }
               }
 

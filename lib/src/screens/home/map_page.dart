@@ -1,14 +1,8 @@
-import 'dart:math';
-
-import 'package:apple_market/src/constants/data_keys.dart';
 import 'package:apple_market/src/model/item_model.dart';
 import 'package:apple_market/src/model/user_model.dart';
-import 'package:apple_market/src/states/category_notifier.dart';
-import 'package:apple_market/src/utils/logger.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:apple_market/src/repo/item_service.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:latlng/latlng.dart';
 import 'package:map/map.dart';
 
@@ -62,7 +56,7 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     // TODO: implement initState
-    // 테스트용 데이터 강제 입력하는 코드
+    // ------------------- 테스트 데이터 자동 입력 코드 -------------------
     // generateData(widget._userModel.userKey, widget._userModel.geoFirePoint);
 
     _mapController = MapController(
@@ -88,144 +82,165 @@ class _MapPageState extends State<MapPage> {
 
         final myLocationWidget = _buildMarkerWidget(myLocationOnMap, color: Colors.black87);
 
-        return Stack(
-          children: [
-            GestureDetector(
-              onScaleStart: _scaleStart,
-              onScaleUpdate: _scaleUpdate,
-              child: Map(
-                controller: _mapController,
-                builder: (context, x, y, z) {
-                  //Legal notice: This url is only used for demo and educational purposes. You need a license key for production use.
+        Size _size = MediaQuery.of(context).size;
+        final middleOnScreen = Offset(_size.width / 2, _size.height / 2);
+        final latLngOnMap = transformer.fromXYCoordsToLatLng(middleOnScreen);
+        // print(' Location : [${latLngOnMap.latitude.toString()}] [${latLngOnMap.longitude.toString()}]');
 
-                  //Google Maps
-                  final url =
-                      'https://www.google.com/maps/vt/pb=!1m4!1m3!1i$z!2i$x!3i$y!2m3!1e0!2sm!3i420120488!3m7!2sen!5e1105!12m4!1e68!2m2!1sset!2sRoadmap!4e0!5m1!1e0!23i4111425';
+        return FutureBuilder<List<ItemModel>>(
+            future: ItemService().getNearByItems(widget._userModel.userKey, latLngOnMap),
+            builder: (context, snapshot) {
+              List<Widget> nearByItems = [];
+              if (snapshot.hasData) {
+                for (var item in snapshot.data!) {
+                  final offset = transformer.fromLatLngToXYCoords(
+                      LatLng(item.geoFirePoint.latitude, item.geoFirePoint.longitude));
+                  nearByItems.add(_buildMarkerWidget(offset));
+                }
+              }
 
-                  final darkUrl =
-                      'https://maps.googleapis.com/maps/vt?pb=!1m5!1m4!1i$z!2i$x!3i$y!4i256!2m3!1e0!2sm!3i556279080!3m17!2sen-US!3sUS!5e18!12m4!1e68!2m2!1sset!2sRoadmap!12m3!1e37!2m1!1ssmartmaps!12m4!1e26!2m2!1sstyles!2zcC52Om9uLHMuZTpsfHAudjpvZmZ8cC5zOi0xMDAscy5lOmwudC5mfHAuczozNnxwLmM6I2ZmMDAwMDAwfHAubDo0MHxwLnY6b2ZmLHMuZTpsLnQuc3xwLnY6b2ZmfHAuYzojZmYwMDAwMDB8cC5sOjE2LHMuZTpsLml8cC52Om9mZixzLnQ6MXxzLmU6Zy5mfHAuYzojZmYwMDAwMDB8cC5sOjIwLHMudDoxfHMuZTpnLnN8cC5jOiNmZjAwMDAwMHxwLmw6MTd8cC53OjEuMixzLnQ6NXxzLmU6Z3xwLmM6I2ZmMDAwMDAwfHAubDoyMCxzLnQ6NXxzLmU6Zy5mfHAuYzojZmY0ZDYwNTkscy50OjV8cy5lOmcuc3xwLmM6I2ZmNGQ2MDU5LHMudDo4MnxzLmU6Zy5mfHAuYzojZmY0ZDYwNTkscy50OjJ8cy5lOmd8cC5sOjIxLHMudDoyfHMuZTpnLmZ8cC5jOiNmZjRkNjA1OSxzLnQ6MnxzLmU6Zy5zfHAuYzojZmY0ZDYwNTkscy50OjN8cy5lOmd8cC52Om9ufHAuYzojZmY3ZjhkODkscy50OjN8cy5lOmcuZnxwLmM6I2ZmN2Y4ZDg5LHMudDo0OXxzLmU6Zy5mfHAuYzojZmY3ZjhkODl8cC5sOjE3LHMudDo0OXxzLmU6Zy5zfHAuYzojZmY3ZjhkODl8cC5sOjI5fHAudzowLjIscy50OjUwfHMuZTpnfHAuYzojZmYwMDAwMDB8cC5sOjE4LHMudDo1MHxzLmU6Zy5mfHAuYzojZmY3ZjhkODkscy50OjUwfHMuZTpnLnN8cC5jOiNmZjdmOGQ4OSxzLnQ6NTF8cy5lOmd8cC5jOiNmZjAwMDAwMHxwLmw6MTYscy50OjUxfHMuZTpnLmZ8cC5jOiNmZjdmOGQ4OSxzLnQ6NTF8cy5lOmcuc3xwLmM6I2ZmN2Y4ZDg5LHMudDo0fHMuZTpnfHAuYzojZmYwMDAwMDB8cC5sOjE5LHMudDo2fHAuYzojZmYyYjM2Mzh8cC52Om9uLHMudDo2fHMuZTpnfHAuYzojZmYyYjM2Mzh8cC5sOjE3LHMudDo2fHMuZTpnLmZ8cC5jOiNmZjI0MjgyYixzLnQ6NnxzLmU6Zy5zfHAuYzojZmYyNDI4MmIscy50OjZ8cy5lOmx8cC52Om9mZixzLnQ6NnxzLmU6bC50fHAudjpvZmYscy50OjZ8cy5lOmwudC5mfHAudjpvZmYscy50OjZ8cy5lOmwudC5zfHAudjpvZmYscy50OjZ8cy5lOmwuaXxwLnY6b2Zm!4e0&key=AIzaSyAOqYYyBbtXQEtcHG7hwAwyCPQSYidG8yU&token=31440';
-                  //Mapbox Streets
-                  // final url =
-                  //     'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/$z/$x/$y?access_token=YOUR_MAPBOX_ACCESS_TOKEN';
+              return Stack(
+                children: [
+                  GestureDetector(
+                    onScaleStart: _scaleStart,
+                    onScaleUpdate: _scaleUpdate,
+                    child: Map(
+                      controller: _mapController,
+                      builder: (context, x, y, z) {
+                        //Legal notice: This url is only used for demo and educational purposes. You need a license key for production use.
 
-                  return ExtendedImage.network(
-                    url,
-                    fit: BoxFit.cover,
-                  );
-                },
-              ),
-            ),
-            myLocationWidget,
-          ],
-        );
+                        //Google Maps
+                        final url =
+                            'https://www.google.com/maps/vt/pb=!1m4!1m3!1i$z!2i$x!3i$y!2m3!1e0!2sm!3i420120488!3m7!2sen!5e1105!12m4!1e68!2m2!1sset!2sRoadmap!4e0!5m1!1e0!23i4111425';
+
+                        final darkUrl =
+                            'https://maps.googleapis.com/maps/vt?pb=!1m5!1m4!1i$z!2i$x!3i$y!4i256!2m3!1e0!2sm!3i556279080!3m17!2sen-US!3sUS!5e18!12m4!1e68!2m2!1sset!2sRoadmap!12m3!1e37!2m1!1ssmartmaps!12m4!1e26!2m2!1sstyles!2zcC52Om9uLHMuZTpsfHAudjpvZmZ8cC5zOi0xMDAscy5lOmwudC5mfHAuczozNnxwLmM6I2ZmMDAwMDAwfHAubDo0MHxwLnY6b2ZmLHMuZTpsLnQuc3xwLnY6b2ZmfHAuYzojZmYwMDAwMDB8cC5sOjE2LHMuZTpsLml8cC52Om9mZixzLnQ6MXxzLmU6Zy5mfHAuYzojZmYwMDAwMDB8cC5sOjIwLHMudDoxfHMuZTpnLnN8cC5jOiNmZjAwMDAwMHxwLmw6MTd8cC53OjEuMixzLnQ6NXxzLmU6Z3xwLmM6I2ZmMDAwMDAwfHAubDoyMCxzLnQ6NXxzLmU6Zy5mfHAuYzojZmY0ZDYwNTkscy50OjV8cy5lOmcuc3xwLmM6I2ZmNGQ2MDU5LHMudDo4MnxzLmU6Zy5mfHAuYzojZmY0ZDYwNTkscy50OjJ8cy5lOmd8cC5sOjIxLHMudDoyfHMuZTpnLmZ8cC5jOiNmZjRkNjA1OSxzLnQ6MnxzLmU6Zy5zfHAuYzojZmY0ZDYwNTkscy50OjN8cy5lOmd8cC52Om9ufHAuYzojZmY3ZjhkODkscy50OjN8cy5lOmcuZnxwLmM6I2ZmN2Y4ZDg5LHMudDo0OXxzLmU6Zy5mfHAuYzojZmY3ZjhkODl8cC5sOjE3LHMudDo0OXxzLmU6Zy5zfHAuYzojZmY3ZjhkODl8cC5sOjI5fHAudzowLjIscy50OjUwfHMuZTpnfHAuYzojZmYwMDAwMDB8cC5sOjE4LHMudDo1MHxzLmU6Zy5mfHAuYzojZmY3ZjhkODkscy50OjUwfHMuZTpnLnN8cC5jOiNmZjdmOGQ4OSxzLnQ6NTF8cy5lOmd8cC5jOiNmZjAwMDAwMHxwLmw6MTYscy50OjUxfHMuZTpnLmZ8cC5jOiNmZjdmOGQ4OSxzLnQ6NTF8cy5lOmcuc3xwLmM6I2ZmN2Y4ZDg5LHMudDo0fHMuZTpnfHAuYzojZmYwMDAwMDB8cC5sOjE5LHMudDo2fHAuYzojZmYyYjM2Mzh8cC52Om9uLHMudDo2fHMuZTpnfHAuYzojZmYyYjM2Mzh8cC5sOjE3LHMudDo2fHMuZTpnLmZ8cC5jOiNmZjI0MjgyYixzLnQ6NnxzLmU6Zy5zfHAuYzojZmYyNDI4MmIscy50OjZ8cy5lOmx8cC52Om9mZixzLnQ6NnxzLmU6bC50fHAudjpvZmYscy50OjZ8cy5lOmwudC5mfHAudjpvZmYscy50OjZ8cy5lOmwudC5zfHAudjpvZmYscy50OjZ8cy5lOmwuaXxwLnY6b2Zm!4e0&key=AIzaSyAOqYYyBbtXQEtcHG7hwAwyCPQSYidG8yU&token=31440';
+                        //Mapbox Streets
+                        // final url =
+                        //     'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/$z/$x/$y?access_token=YOUR_MAPBOX_ACCESS_TOKEN';
+
+                        return ExtendedImage.network(
+                          url,
+                          fit: BoxFit.cover,
+                        );
+                      },
+                    ),
+                  ),
+                  myLocationWidget,
+                  ...nearByItems,
+                ],
+              );
+            });
       },
       controller: _mapController,
     );
   }
 
+// ------------------- 테스트 데이터 자동 입력 코드 -------------------
 
+//
+// Future<List<String>> generateData(
+//     String userKey, GeoFirePoint geoFirePoint) async {
+//   List<String> itemKeys = [];
+//
+//   DateTime now = DateTime.now().toUtc();
+//   const numOfItem = 20;
+//   await FirebaseFirestore.instance.runTransaction((Transaction tx) async {
+//     for (int i = 0; i < numOfItem; i++) {
+//       final String itemKey = ItemModel.generateItemKey(userKey);
+//       logger.d('RandomeData - $itemKey');
+//       itemKeys.add(itemKey);
+//       final DocumentReference postRef =
+//       FirebaseFirestore.instance.collection(COL_ITEMS).doc(itemKey);
+//
+//       final DocumentReference userItemDocReference = FirebaseFirestore
+//           .instance
+//           .collection(COL_USERS)
+//           .doc(userKey)
+//           .collection(COL_USER_ITEMS)
+//           .doc(itemKey);
+//
+//       var rng = Random();
+//       GeoPoint geoPoint = geoFirePoint.data['geopoint'];
+//       final newGeoData = GeoFirePoint(
+//           geoPoint.latitude + (0.001 * (rng.nextInt(100) - 50)),
+//           geoPoint.longitude + (0.001 * (rng.nextInt(100) - 50)));
+//
+//       ItemModel item = ItemModel(
+//         userKey: userKey,
+//         itemKey: itemKey,
+//         userPhone: widget._userModel.phoneNumber, //'+821040155592',
+//         imageDownloadUrls: ['https://picsum.photos/200'],
+//         title: 'testing + $i',
+//         category: categoriesMapEngToKor.keys
+//             .elementAt(i % categoriesMapEngToKor.keys.length),
+//         price: 100 * i,
+//         negotiable: i % 2 == 0,
+//         detail: 'testing detail + $i',
+//         address: 'testing address + $i',
+//         geoFirePoint: newGeoData,
+//         createdDate: now.subtract(Duration(days: i)),
+//       );
+//
+//       tx.set(postRef, item.toJson());
+//       tx.set(userItemDocReference, item.toMinJson());
+//     }
+//   });
+//   return itemKeys;
+// }
+//
+// final List<String> nouns = [
+//   'time',
+//   'year',
+//   'people',
+//   'way',
+//   'day',
+//   'man',
+//   'thing',
+//   'woman',
+//   'life',
+//   'child',
+//   'world',
+//   'school',
+//   'state',
+//   'family',
+//   'student',
+//   'group',
+//   'country',
+//   'problem',
+//   'hand',
+//   'part',
+//   'place',
+//   'case',
+//   'week',
+//   'company',
+//   'system',
+//   'program',
+//   'question',
+//   'work',
+//   'government',
+//   'number',
+//   'night',
+//   'point',
+//   'home',
+//   'water',
+//   'room',
+//   'mother',
+//   'area',
+//   'money',
+//   'story',
+//   'fact',
+//   'month',
+//   'lot',
+//   'right',
+//   'study',
+//   'book',
+//   'eye',
+//   'job',
+//   'word',
+//   'business'
+// ];
 
-  Future<List<String>> generateData(
-      String userKey, GeoFirePoint geoFirePoint) async {
-    List<String> itemKeys = [];
-
-    DateTime now = DateTime.now().toUtc();
-    const numOfItem = 20;
-    await FirebaseFirestore.instance.runTransaction((Transaction tx) async {
-      for (int i = 0; i < numOfItem; i++) {
-        final String itemKey = ItemModel.generateItemKey(userKey);
-        logger.d('RandomeData - $itemKey');
-        itemKeys.add(itemKey);
-        final DocumentReference postRef =
-        FirebaseFirestore.instance.collection(COL_ITEMS).doc(itemKey);
-
-        final DocumentReference userItemDocReference = FirebaseFirestore
-            .instance
-            .collection(COL_USERS)
-            .doc(userKey)
-            .collection(COL_USER_ITEMS)
-            .doc(itemKey);
-
-        var rng = Random();
-        GeoPoint geoPoint = geoFirePoint.data['geopoint'];
-        final newGeoData = GeoFirePoint(
-            geoPoint.latitude + (0.001 * (rng.nextInt(100) - 50)),
-            geoPoint.longitude + (0.001 * (rng.nextInt(100) - 50)));
-
-        ItemModel item = ItemModel(
-          userKey: userKey,
-          itemKey: itemKey,
-          userPhone: widget._userModel.phoneNumber, //'+821040155592',
-          imageDownloadUrls: ['https://picsum.photos/200'],
-          title: 'testing + $i',
-          category: categoriesMapEngToKor.keys
-              .elementAt(i % categoriesMapEngToKor.keys.length),
-          price: 100 * i,
-          negotiable: i % 2 == 0,
-          detail: 'testing detail + $i',
-          address: 'testing address + $i',
-          geoFirePoint: newGeoData,
-          createdDate: now.subtract(Duration(days: i)),
-        );
-
-        tx.set(postRef, item.toJson());
-        tx.set(userItemDocReference, item.toMinJson());
-      }
-    });
-    return itemKeys;
-  }
-
-  final List<String> nouns = [
-    'time',
-    'year',
-    'people',
-    'way',
-    'day',
-    'man',
-    'thing',
-    'woman',
-    'life',
-    'child',
-    'world',
-    'school',
-    'state',
-    'family',
-    'student',
-    'group',
-    'country',
-    'problem',
-    'hand',
-    'part',
-    'place',
-    'case',
-    'week',
-    'company',
-    'system',
-    'program',
-    'question',
-    'work',
-    'government',
-    'number',
-    'night',
-    'point',
-    'home',
-    'water',
-    'room',
-    'mother',
-    'area',
-    'money',
-    'story',
-    'fact',
-    'month',
-    'lot',
-    'right',
-    'study',
-    'book',
-    'eye',
-    'job',
-    'word',
-    'business'
-  ];
-
+// ------------------- 테스트 데이터 자동 입력 코드 -------------------
 
 }

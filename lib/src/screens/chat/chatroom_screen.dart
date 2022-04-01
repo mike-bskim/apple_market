@@ -63,7 +63,7 @@ class _ChatroomScreenState extends State<ChatroomScreen> {
                           style: Theme.of(context).textTheme.bodyText1,
                           children: [
                             TextSpan(
-                                text: ' 이케아 소르테라 분리수거함',
+                                text: ' 이케아 소르테라 분리수거함 ',
                                 style: Theme.of(context).textTheme.bodyText2)
                           ]),
                     ),

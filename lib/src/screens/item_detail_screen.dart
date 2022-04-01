@@ -48,6 +48,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
 
   @override
   void initState() {
+    newItemKey = widget.itemKey;
     if (widget.itemKey[0] == ':') {
       // String orgItemKey = widget.itemKey;
       newItemKey = widget.itemKey.substring(1);

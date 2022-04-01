@@ -1,10 +1,10 @@
 import 'package:apple_market/src/constants/data_keys.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-/// chatKey : ""
-/// msg : ""
-/// createDate : ""
-/// userKey : ""
+/// chatKey : "",
+/// msg : "",
+/// createDate : "",
+/// userKey : "",
 /// reference : ""
 
 class ChatModel {

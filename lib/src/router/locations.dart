@@ -1,3 +1,4 @@
+import 'package:apple_market/src/screens/chat/chatroom_screen.dart';
 import 'package:apple_market/src/screens/home_screen.dart';
 import 'package:apple_market/src/screens/input/category_input_screen.dart';
 import 'package:apple_market/src/screens/input_screen.dart';
@@ -14,6 +15,7 @@ const LOCATION_INPUT = 'input';
 const LOCATION_CATEGORY_INPUT = 'category_input';
 const LOCATION_ITEM = 'item';
 const LOCATION_ITEM_ID = 'item_id';
+const LOCATION_CHATROOM_ID = 'chatroom_id';
 
 class HomeLocation extends BeamLocation<BeamState> {
   @override
@@ -46,7 +48,8 @@ class InputLocation extends BeamLocation<BeamState> {
   List<BeamPage> buildPages(BuildContext context, BeamState state) {
     // TODO: implement buildPages
     return [
-      ...HomeLocation().buildPages(context, state), // 이게 없으면 input 페이지에서 back 버튼이 안생김
+      ...HomeLocation().buildPages(context, state),
+      // 이게 없으면 input 페이지에서 back 버튼이 안생김
       if (state.pathPatternSegments.contains(LOCATION_INPUT))
         // BeamPage(key: const ValueKey('input'), child: const InputScreen()),
         BeamPage(
@@ -54,7 +57,8 @@ class InputLocation extends BeamLocation<BeamState> {
           child: MultiProvider(
             providers: [
               ChangeNotifierProvider.value(value: categoryNotifier),
-              ChangeNotifierProvider(create: (context) => SelectImageNotifier()),
+              ChangeNotifierProvider(
+                  create: (context) => SelectImageNotifier()),
             ],
             child: const InputScreen(),
           ),
@@ -80,16 +84,24 @@ class ItemLocation extends BeamLocation<BeamState> {
   List<BeamPage> buildPages(BuildContext context, BeamState state) {
     // TODO: implement buildPages
     return [
-      ...HomeLocation().buildPages(context, state), // 이게 없으면 input 페이지에서 back 버튼이 안생김
+      ...HomeLocation().buildPages(context, state),
+      // 이게 없으면 input 페이지에서 back 버튼이 안생김
       if (state.pathParameters.containsKey(LOCATION_ITEM_ID))
         BeamPage(
           key: const ValueKey(LOCATION_ITEM_ID),
           child: ItemDetailScreen(state.pathParameters[LOCATION_ITEM_ID] ?? ''),
+        ),
+      if (state.pathParameters.containsKey(LOCATION_CHATROOM_ID))
+        BeamPage(
+          key: const ValueKey(LOCATION_CHATROOM_ID),
+          child: ChatroomScreen(
+              chatroomKey: state.pathParameters[LOCATION_CHATROOM_ID] ?? ''),
         ),
     ];
   }
 
   @override
   // TODO: implement pathBlueprints
-  List<Pattern> get pathPatterns => ['/$LOCATION_ITEM/:$LOCATION_ITEM_ID'];
+  List<Pattern> get pathPatterns =>
+      ['/$LOCATION_ITEM/:$LOCATION_ITEM_ID/:$LOCATION_CHATROOM_ID'];
 }

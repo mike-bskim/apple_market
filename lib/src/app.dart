@@ -21,7 +21,8 @@ final _routerDelegate = BeamerDelegate(
       )
     ],
     locationBuilder:
-        BeamerLocationBuilder(beamLocations: [HomeLocation(), InputLocation(), ItemLocation()]));
+        BeamerLocationBuilder(beamLocations: [HomeLocation(), InputLocation(), ItemLocation()])
+);
 
 class AppleApp extends StatelessWidget {
   const AppleApp({Key? key}) : super(key: key);

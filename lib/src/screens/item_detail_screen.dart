@@ -1,12 +1,16 @@
 import 'package:apple_market/src/constants/common_size.dart';
+import 'package:apple_market/src/model/chatroom_model.dart';
 import 'package:apple_market/src/model/item_model.dart';
 import 'package:apple_market/src/model/user_model.dart';
+import 'package:apple_market/src/repo/chat_service.dart';
 import 'package:apple_market/src/repo/item_service.dart';
+import 'package:apple_market/src/router/locations.dart';
 import 'package:apple_market/src/screens/item/similar_item.dart';
 import 'package:apple_market/src/states/category_notifier.dart';
 import 'package:apple_market/src/states/user_notifier.dart';
 import 'package:apple_market/src/utils/logger.dart';
 import 'package:apple_market/src/utils/time_calculation.dart';
+import 'package:beamer/src/beamer.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -28,6 +32,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
   bool isAppbarCollapsed = false;
   Size? _size;
   num? _statusBarHeight;
+  late String newItemKey;
 
   final Widget _textGap = const SizedBox(height: padding_16);
 
@@ -43,18 +48,25 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
 
   @override
   void initState() {
+    if (widget.itemKey[0] == ':') {
+      // String orgItemKey = widget.itemKey;
+      newItemKey = widget.itemKey.substring(1);
+    }
+
     _scrollController.addListener(() {
       if (_size == null && _statusBarHeight == null) return;
       // logger.d(
       //     '${_scrollController.offset}, ${_size!.width - kToolbarHeight - _statusBarHeight!}, ${isAppbarCollapsed.toString()}');
 
       if (isAppbarCollapsed) {
-        if (_scrollController.offset < _size!.width - kToolbarHeight - _statusBarHeight!) {
+        if (_scrollController.offset <
+            _size!.width - kToolbarHeight - _statusBarHeight!) {
           isAppbarCollapsed = false;
           setState(() {});
         }
       } else {
-        if (_scrollController.offset > _size!.width - kToolbarHeight - _statusBarHeight!) {
+        if (_scrollController.offset >
+            _size!.width - kToolbarHeight - _statusBarHeight!) {
           isAppbarCollapsed = true;
           setState(() {});
         }
@@ -70,12 +82,40 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     super.dispose();
   }
 
+  void _goToChatroom(ItemModel itemModel, UserModel userModel) async {
+    String chatroomKey =
+        ChatroomModel.generateChatRoomKey(userModel.userKey, newItemKey);
+    logger.d({
+      'buyerKey' : '[${userModel.userKey}]',
+      'sellerKey' : '[${itemModel.userKey}]',
+      'newItemKey' : '[$newItemKey]'
+    });
+
+    ChatroomModel _chatroomModel = ChatroomModel(
+      itemImage: itemModel.imageDownloadUrls[0],
+      itemTitle: itemModel.title,
+      itemKey: newItemKey,
+      itemAddress: itemModel.address,
+      itemPrice: itemModel.price,
+      sellerKey: itemModel.userKey,
+      buyerKey: userModel.userKey,
+      sellerImage: 'https://minimaltoolkit.com/images/randomdata/male/101.jpg',
+      buyerImage: 'https://minimaltoolkit.com/images/randomdata/female/41.jpg',
+      geoFirePoint: itemModel.geoFirePoint,
+      chatroomKey: chatroomKey,
+      lastMsgTime: DateTime.now(),
+    );
+    await ChatService().createNewChatroom(_chatroomModel);
+
+    context.beamToNamed('/$LOCATION_ITEM/:$newItemKey/:$chatroomKey');
+  }
+
   @override
   Widget build(BuildContext context) {
-    // logger.d('item detail screen >> build >>> [${widget.itemKey}]');
+    logger.d('item detail screen >> build >>> [$newItemKey]');
 
     return FutureBuilder<ItemModel>(
-      future: ItemService().getItem(widget.itemKey),
+      future: ItemService().getItem(newItemKey),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           // FutureBuilder 의 snapshot 에서 게시글 데이터 가져오기
@@ -119,12 +159,14 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                                 endIndent: padding_08,
                               ),
                               Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     itemModel.price.toString(),
-                                    style: Theme.of(context).textTheme.bodyText1,
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
                                   ),
                                   Text(
                                     itemModel.negotiable ? '가격제안가능' : '가격제안불가',
@@ -139,7 +181,9 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                               ),
                               Expanded(child: Container()),
                               TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  _goToChatroom(itemModel, userModel);
+                                },
                                 child: const Text('채팅으로 거래하기'),
                               ),
                             ],
@@ -168,15 +212,19 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                               Row(
                                 children: [
                                   Text(
-                                    categoriesMapEngToKor[itemModel.category] ?? '선택',
+                                    categoriesMapEngToKor[itemModel.category] ??
+                                        '선택',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyText2!
-                                        .copyWith(decoration: TextDecoration.underline),
+                                        .copyWith(
+                                            decoration:
+                                                TextDecoration.underline),
                                   ),
                                   Text(
                                     ' · ${TimeCalculation.getTimeDiff(itemModel.createdDate)}',
-                                    style: Theme.of(context).textTheme.bodyText2,
+                                    style:
+                                        Theme.of(context).textTheme.bodyText2,
                                   ),
                                 ],
                               ),
@@ -217,7 +265,8 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                         ),
                         SliverToBoxAdapter(
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: padding_16),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: padding_16),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -248,23 +297,28 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                         ),
                         SliverToBoxAdapter(
                           child: FutureBuilder<List<ItemModel>>(
-                            future: ItemService()
-                                .getUserItems(itemModel.userKey, itemKey: itemModel.itemKey),
+                            future: ItemService().getUserItems(
+                                itemModel.userKey,
+                                itemKey: itemModel.itemKey),
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
                                 return Padding(
                                   padding: const EdgeInsets.all(padding_08),
                                   child: GridView.count(
-                                    padding: const EdgeInsets.symmetric(horizontal: padding_08),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: padding_08),
                                     //EdgeInsets.zero,
-                                    physics: const NeverScrollableScrollPhysics(),
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
                                     shrinkWrap: true,
                                     crossAxisCount: 2,
                                     mainAxisSpacing: padding_08,
                                     crossAxisSpacing: padding_08,
                                     childAspectRatio: 6 / 7,
-                                    children: List.generate(snapshot.data!.length,
-                                        (index) => SimilarItem(snapshot.data![index])),
+                                    children: List.generate(
+                                        snapshot.data!.length,
+                                        (index) =>
+                                            SimilarItem(snapshot.data![index])),
                                   ),
                                 );
                               }
@@ -308,8 +362,11 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                       backgroundColor: Colors.transparent,
                       appBar: AppBar(
                         shadowColor: Colors.transparent,
-                        backgroundColor: isAppbarCollapsed ? Colors.white : Colors.transparent,
-                        foregroundColor: isAppbarCollapsed ? Colors.black87 : Colors.white,
+                        backgroundColor: isAppbarCollapsed
+                            ? Colors.white
+                            : Colors.transparent,
+                        foregroundColor:
+                            isAppbarCollapsed ? Colors.black87 : Colors.white,
                       ),
                     ),
                   )
@@ -422,7 +479,9 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                       const FittedBox(
                         child: Text(
                           '37.3 °C',
-                          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueAccent),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blueAccent),
                         ),
                       ),
                       const SizedBox(height: 6),

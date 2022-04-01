@@ -7,9 +7,7 @@ import 'package:latlng/latlng.dart';
 
 class ItemService {
   static final ItemService _itemService = ItemService._internal();
-
   factory ItemService() => _itemService;
-
   ItemService._internal();
 
   Future createNewItem(ItemModel itemModel, String itemKey, String userKey) async {

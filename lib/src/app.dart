@@ -6,24 +6,28 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 final _routerDelegate = BeamerDelegate(
-    guards: [
-      BeamGuard(
-        pathPatterns: [
-          // pathBlueprints: [
-          ...HomeLocation().pathPatterns,
-          ...InputLocation().pathPatterns,
-          ...ItemLocation().pathPatterns,
-          ...LoginLocation().pathPatterns,
-        ],
-        check: (context, location) {
-          return context.watch<UserNotifier>().user != null;
-        },
-        showPage: BeamPage(child: StartScreen()),
-        // beamToNamed: (_,__) => '/login',
-      )
-    ],
-    locationBuilder:
-        BeamerLocationBuilder(beamLocations: [HomeLocation(), InputLocation(), ItemLocation(), LoginLocation()])
+  guards: [
+    BeamGuard(
+      pathPatterns: [
+        // pathBlueprints: [
+        ...HomeLocation().pathPatterns,
+        ...InputLocation().pathPatterns,
+        ...ItemLocation().pathPatterns,
+        // ...LoginLocation().pathPatterns,
+      ],
+      check: (context, location) {
+        return context.watch<UserNotifier>().user != null;
+      },
+      showPage: BeamPage(child: StartScreen()),
+      // beamToNamed: (origin, target) => '/login',
+    )
+  ],
+  locationBuilder: BeamerLocationBuilder(beamLocations: [
+    HomeLocation(),
+    InputLocation(),
+    ItemLocation(),
+    // LoginLocation(),
+  ]),
 );
 
 class AppleApp extends StatelessWidget {
@@ -45,9 +49,14 @@ class AppleApp extends StatelessWidget {
             button: TextStyle(color: Colors.white),
             subtitle1: TextStyle(color: Colors.black87, fontSize: 15),
             subtitle2: TextStyle(color: Colors.grey, fontSize: 13),
-            bodyText1: TextStyle(color: Colors.black87, fontSize: 12, fontWeight: FontWeight.normal),
-            bodyText2: TextStyle(color: Colors.black54, fontSize: 12, fontWeight: FontWeight.w100),
-
+            bodyText1: TextStyle(
+                color: Colors.black87,
+                fontSize: 12,
+                fontWeight: FontWeight.normal),
+            bodyText2: TextStyle(
+                color: Colors.black54,
+                fontSize: 12,
+                fontWeight: FontWeight.w100),
           ),
           // inputDecorationTheme: const InputDecorationTheme(
           //   enabledBorder: UnderlineInputBorder(

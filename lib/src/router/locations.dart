@@ -3,6 +3,7 @@ import 'package:apple_market/src/screens/home_screen.dart';
 import 'package:apple_market/src/screens/input/category_input_screen.dart';
 import 'package:apple_market/src/screens/input_screen.dart';
 import 'package:apple_market/src/screens/item_detail_screen.dart';
+import 'package:apple_market/src/screens/start_screen.dart';
 import 'package:apple_market/src/states/category_notifier.dart';
 import 'package:apple_market/src/states/select_image_notifier.dart';
 import 'package:beamer/beamer.dart';
@@ -10,12 +11,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 // ignore_for_file: constant_identifier_names
+const LOCATION_LOGIN = 'login';
 const LOCATION_HOME = 'home';
 const LOCATION_INPUT = 'input';
 const LOCATION_CATEGORY_INPUT = 'category_input';
 const LOCATION_ITEM = 'item';
 const LOCATION_ITEM_ID = 'item_id';
 const LOCATION_CHATROOM_ID = 'chatroom_id';
+
 
 class HomeLocation extends BeamLocation<BeamState> {
   @override
@@ -104,4 +107,16 @@ class ItemLocation extends BeamLocation<BeamState> {
   // TODO: implement pathBlueprints
   List<Pattern> get pathPatterns =>
       ['/$LOCATION_ITEM/:$LOCATION_ITEM_ID/:$LOCATION_CHATROOM_ID'];
+}
+
+class LoginLocation extends BeamLocation<BeamState> {
+  @override
+  List<BeamPage> buildPages(BuildContext context, BeamState state) {
+    // TODO: implement buildPages
+    return [BeamPage(key: const ValueKey(LOCATION_LOGIN), child: StartScreen())];
+  }
+
+  @override
+  // TODO: implement pathPatterns
+  List<Pattern> get pathPatterns => ['/login'];
 }

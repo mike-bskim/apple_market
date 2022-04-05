@@ -13,15 +13,17 @@ final _routerDelegate = BeamerDelegate(
           ...HomeLocation().pathPatterns,
           ...InputLocation().pathPatterns,
           ...ItemLocation().pathPatterns,
+          ...LoginLocation().pathPatterns,
         ],
         check: (context, location) {
           return context.watch<UserNotifier>().user != null;
         },
         showPage: BeamPage(child: StartScreen()),
+        // beamToNamed: (_,__) => '/login',
       )
     ],
     locationBuilder:
-        BeamerLocationBuilder(beamLocations: [HomeLocation(), InputLocation(), ItemLocation()])
+        BeamerLocationBuilder(beamLocations: [HomeLocation(), InputLocation(), ItemLocation(), LoginLocation()])
 );
 
 class AppleApp extends StatelessWidget {

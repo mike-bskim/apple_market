@@ -20,8 +20,8 @@ class Chat extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Text('오전 10:25'),
-        SizedBox(
+        const Text('오전 10:25'),
+        const SizedBox(
           width: 8,
         ),
         Container(
@@ -30,7 +30,7 @@ class Chat extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyText1!
               ..copyWith(color: Colors.white),
           ),
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             vertical: 12,
             horizontal: 16,
           ),
@@ -65,7 +65,7 @@ class Chat extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           shape: BoxShape.rectangle,
         ),
-        SizedBox(width: 8),
+        const SizedBox(width: 8),
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -75,7 +75,7 @@ class Chat extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyText1!
                   ..copyWith(color: Colors.white),
               ),
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 vertical: 12,
                 horizontal: 16,
               ),
@@ -85,7 +85,7 @@ class Chat extends StatelessWidget {
               ),
               decoration: BoxDecoration(
                 color: Colors.grey[300]!,
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(2),
                   topRight: roundedCorner,
                   bottomRight: roundedCorner,
@@ -93,8 +93,8 @@ class Chat extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(width: 8),
-            Text('오후 02:25'),
+            const SizedBox(width: 8),
+            const Text('오후 02:25'),
           ],
         ),
       ],

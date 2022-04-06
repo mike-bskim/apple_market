@@ -39,7 +39,7 @@ class ChatService {
 
     await FirebaseFirestore.instance.runTransaction((transaction) async {
       transaction.set(docRef, chatModel.toJson());
-      transaction.set(chatroomDocRef, {
+      transaction.update(chatroomDocRef, {
         DOC_LASTMSG: chatModel.msg,
         DOC_LASTMSGTIME: chatModel.createDate,
         DOC_LASTMSGUSERKEY: chatModel.userKey

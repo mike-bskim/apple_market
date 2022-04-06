@@ -83,14 +83,15 @@ class ChatService {
     return chatlist;
   }
 
-//todo: lastest chats
+//todo: latest chats
   Future<List<ChatModel>> getLatestChats(String chatroomKey, DocumentReference currentLastestChatRef) async{
     QuerySnapshot<Map<String, dynamic>> snapshot =  await FirebaseFirestore.instance
         .collection(COL_CHATROOMS)
         .doc(chatroomKey)
         .collection(COL_CHATS)
-        .endAtDocument(await currentLastestChatRef.get())
         .orderBy(DOC_CREATEDDATE, descending: true)
+        // .endAtDocument(await currentLastestChatRef.get())
+        .endBeforeDocument(await currentLastestChatRef.get())
         .get();
 
     List<ChatModel> chatlist = [];
@@ -108,8 +109,8 @@ class ChatService {
         .collection(COL_CHATROOMS)
         .doc(chatroomKey)
         .collection(COL_CHATS)
-        .startAfterDocument(await oldestChatRef.get())
         .orderBy(DOC_CREATEDDATE, descending: true)
+        .startAfterDocument(await oldestChatRef.get())
         .limit(10)
         .get();
 

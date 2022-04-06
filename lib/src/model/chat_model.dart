@@ -24,13 +24,16 @@ class ChatModel {
 
   ChatModel.fromJson(Map<String, dynamic> json, this.chatKey, this.reference) {
     // chatKey = json[DOC_CHATKEY];
-    msg = json[DOC_MSG]??'';
-    createDate = json[DOC_CREATEDDATE]??DateTime.now();
-    userKey = json[DOC_USERKEY]??'';
+    msg = json[DOC_MSG] ?? '';
+    createDate = json[DOC_CREATEDDATE] == null
+        ? DateTime.now().toUtc()
+        : (json[DOC_CREATEDDATE] as Timestamp).toDate();
+    userKey = json[DOC_USERKEY] ?? '';
     // reference = json['reference'];
   }
 
-  ChatModel.fromQuerySnapshot(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
+  ChatModel.fromQuerySnapshot(
+      QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
       : this.fromJson(snapshot.data(), snapshot.id, snapshot.reference);
 
   ChatModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot)

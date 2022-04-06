@@ -1,3 +1,4 @@
+import 'package:apple_market/src/model/chat_model.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 
@@ -6,8 +7,13 @@ const roundedCorner = Radius.circular(20);
 class Chat extends StatelessWidget {
   final Size size;
   final bool isMine;
+  final ChatModel chatModel;
 
-  const Chat({Key? key, required this.size, required this.isMine})
+  const Chat(
+      {Key? key,
+      required this.size,
+      required this.isMine,
+      required this.chatModel})
       : super(key: key);
 
   @override
@@ -26,9 +32,9 @@ class Chat extends StatelessWidget {
         ),
         Container(
           child: Text(
-            'aabbbccsadfsdfsdfffffffffffffffffffffffffffffffffffffffffc',
+            chatModel.msg,
             style: Theme.of(context).textTheme.bodyText1!
-              ..copyWith(color: Colors.white),
+              .copyWith(color: Colors.white),
           ),
           padding: const EdgeInsets.symmetric(
             vertical: 12,
@@ -71,9 +77,9 @@ class Chat extends StatelessWidget {
           children: [
             Container(
               child: Text(
-                'aabbbccsadfsdfffc',
+                chatModel.msg,
                 style: Theme.of(context).textTheme.bodyText1!
-                  ..copyWith(color: Colors.white),
+                  .copyWith(color: Colors.white),
               ),
               padding: const EdgeInsets.symmetric(
                 vertical: 12,

@@ -1,5 +1,6 @@
 import 'package:apple_market/src/model/user_model.dart';
 import 'package:apple_market/src/router/locations.dart';
+import 'package:apple_market/src/screens/chat/chat_list_page.dart';
 import 'package:apple_market/src/screens/home/items_page.dart';
 import 'package:apple_market/src/screens/home/map_page.dart';
 import 'package:apple_market/src/states/user_notifier.dart';
@@ -35,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (_detail.contains('(') && _detail.contains(')')) {
       _location = _detail.replaceAll('(', '').replaceAll(')', '');
     } else {
-      _location = _address[2];
+      _location = _address[0];// 2
     }
 
     return Scaffold(
@@ -127,9 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: <Widget>[
             const ItemsPage(),
             (context.read<UserNotifier>().userModel == null) ? Container() : MapPage(_userModel),
-            Container(
-              color: Colors.accents[2],
-            ),
+            const ChatListPage(),
             Container(
               color: Colors.accents[3],
             ),

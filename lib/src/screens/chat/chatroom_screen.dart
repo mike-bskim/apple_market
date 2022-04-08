@@ -1,4 +1,5 @@
 import 'package:apple_market/src/model/chat_model.dart';
+import 'package:apple_market/src/model/chatroom_model.dart';
 import 'package:apple_market/src/model/user_model.dart';
 import 'package:apple_market/src/repo/chat_service.dart';
 import 'package:apple_market/src/screens/chat/chat.dart';
@@ -8,6 +9,8 @@ import 'package:apple_market/src/utils/logger.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 
 class ChatroomScreen extends StatefulWidget {
   final String chatroomKey;
@@ -89,46 +92,71 @@ class _ChatroomScreenState extends State<ChatroomScreen> {
   }
 
   MaterialBanner _buildItemInfo(BuildContext context) {
+    ChatroomModel? chatroomModel = context.read<ChatNotifier>().chatroomModel;
     return MaterialBanner(
       padding: EdgeInsets.zero,
       leadingPadding: EdgeInsets.zero,
+      actions: [Container()],
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ListTile(
-            dense: true,
-            minVerticalPadding: 0,
-            contentPadding: const EdgeInsets.only(left: 4, right: 0),
-            leading: Padding(
-              padding: const EdgeInsets.only(left: 12, top: 8, bottom: 4),
-              child: ExtendedImage.network(
-                'https://randomuser.me/api/portraits/lego/4.jpg',
-                width: 48,
-                height: 48,
-                fit: BoxFit.cover,
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 16, right: 12, top: 12, bottom: 12),
+                child: chatroomModel == null
+                    ? Shimmer.fromColors(
+                        highlightColor: Colors.grey[200]!,
+                        baseColor: Colors.grey,
+                        child: Container(
+                          width: 48,
+                          height: 48,
+                          color: Colors.white,
+                        ),
+                      )
+                    : ExtendedImage.network(
+                        chatroomModel.itemImage,
+                        // 'https://randomuser.me/api/portraits/lego/4.jpg', // lego pic
+                        width: 48,
+                        height: 48,
+                        fit: BoxFit.cover,
+                      ),
               ),
-            ),
-            title: RichText(
-              text: TextSpan(
-                  text: '거래완료',
-                  style: Theme.of(context).textTheme.bodyText1,
-                  children: [
-                    TextSpan(
-                        text: ' 이케아 소르테라 분리수거함 ',
-                        style: Theme.of(context).textTheme.bodyText2)
-                  ]),
-            ),
-            subtitle: RichText(
-              text: TextSpan(
-                  text: '30,000원',
-                  style: Theme.of(context).textTheme.bodyText1,
-                  children: [
-                    TextSpan(
-                        text: ' (가격제한불가)',
-                        style: Theme.of(context).textTheme.bodyText2!
-                          .copyWith(color: Colors.black26))
-                  ]),
-            ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  RichText(
+                    text: TextSpan(
+                        text: '거래완료',
+                        style: Theme.of(context).textTheme.bodyText1,
+                        children: [
+                          TextSpan(
+                              text: chatroomModel == null
+                                  ? ''
+                                  : ' ' + chatroomModel.itemTitle,
+                              style: Theme.of(context).textTheme.bodyText2)
+                        ]),
+                  ),
+                  RichText(
+                    text: TextSpan(
+                        text: chatroomModel == null
+                            ? ''
+                            : chatroomModel.itemPrice.toCurrencyString(
+                                mantissaLength: 0, trailingSymbol: '원'),
+                        style: Theme.of(context).textTheme.bodyText1,
+                        children: [
+                          TextSpan(
+                              text: ' (가격제한불가)',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2!
+                                  .copyWith(color: Colors.black26))
+                        ]),
+                  ),
+                ],
+              ),
+            ],
           ),
           Padding(
             padding: const EdgeInsets.only(left: 16, bottom: 8),
@@ -143,8 +171,10 @@ class _ChatroomScreenState extends State<ChatroomScreen> {
                 ),
                 label: Text(
                   '후기 남기기',
-                  style: Theme.of(context).textTheme.bodyText1!
-                    .copyWith(color: Colors.black87),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText1!
+                      .copyWith(color: Colors.black87),
                 ),
                 style: TextButton.styleFrom(
                   backgroundColor: Colors.white,
@@ -158,7 +188,6 @@ class _ChatroomScreenState extends State<ChatroomScreen> {
           ),
         ],
       ),
-      actions: [Container()],
     );
   }
 

@@ -7,9 +7,9 @@ import 'package:apple_market/src/utils/logger.dart';
 import 'package:flutter/foundation.dart';
 
 class ChatNotifier extends ChangeNotifier {
-  late ChatroomModel _chatroomModel;
+  ChatroomModel? _chatroomModel;
   final List<ChatModel> _chatList = [];
-  late String _chatroomKey;
+  final String _chatroomKey;
 
   ChatNotifier(this._chatroomKey) {
     // todo: connect chatroom
@@ -51,7 +51,7 @@ class ChatNotifier extends ChangeNotifier {
 
   List<ChatModel> get chatList => _chatList;
 
-  ChatroomModel get chatroomModel => _chatroomModel;
+  ChatroomModel? get chatroomModel => _chatroomModel;
 
   String get chatroomKey => _chatroomKey;
 }

@@ -65,8 +65,9 @@ class ChatService {
   });
 
 //todo: get char list
-  Future<List<ChatModel>> getChatList(String chatroomKey) async{
-    QuerySnapshot<Map<String, dynamic>> snapshot =  await FirebaseFirestore.instance
+  Future<List<ChatModel>> getChatList(String chatroomKey) async {
+    QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+        .instance
         .collection(COL_CHATROOMS)
         .doc(chatroomKey)
         .collection(COL_CHATS)
@@ -84,15 +85,17 @@ class ChatService {
   }
 
 //todo: latest chats
-  Future<List<ChatModel>> getLatestChats(String chatroomKey, DocumentReference currentLastestChatRef) async{
-    QuerySnapshot<Map<String, dynamic>> snapshot =  await FirebaseFirestore.instance
-        .collection(COL_CHATROOMS)
-        .doc(chatroomKey)
-        .collection(COL_CHATS)
-        .orderBy(DOC_CREATEDDATE, descending: true)
-        // .endAtDocument(await currentLastestChatRef.get())
-        .endBeforeDocument(await currentLastestChatRef.get())
-        .get();
+  Future<List<ChatModel>> getLatestChats(
+      String chatroomKey, DocumentReference currentLastestChatRef) async {
+    QuerySnapshot<Map<String, dynamic>> snapshot =
+        await FirebaseFirestore.instance
+            .collection(COL_CHATROOMS)
+            .doc(chatroomKey)
+            .collection(COL_CHATS)
+            .orderBy(DOC_CREATEDDATE, descending: true)
+            // .endAtDocument(await currentLastestChatRef.get())
+            .endBeforeDocument(await currentLastestChatRef.get())
+            .get();
 
     List<ChatModel> chatlist = [];
 
@@ -104,8 +107,10 @@ class ChatService {
   }
 
 //todo: older chats
-  Future<List<ChatModel>> getOlderChats(String chatroomKey, DocumentReference oldestChatRef) async{
-    QuerySnapshot<Map<String, dynamic>> snapshot =  await FirebaseFirestore.instance
+  Future<List<ChatModel>> getOlderChats(
+      String chatroomKey, DocumentReference oldestChatRef) async {
+    QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+        .instance
         .collection(COL_CHATROOMS)
         .doc(chatroomKey)
         .collection(COL_CHATS)
@@ -123,4 +128,32 @@ class ChatService {
     return chatlist;
   }
 
+  Future<List<ChatroomModel>> getMyChatList(String myUserKey) async {
+    List<ChatroomModel> chatrooms = [];
+
+    // todo: I am as a buyer
+    QuerySnapshot<Map<String, dynamic>> buying = await FirebaseFirestore
+        .instance
+        .collection(COL_CHATROOMS)
+        .where(DOC_BUYERKEY, isEqualTo: myUserKey)
+        .get();
+
+    // todo: I am as a seller
+    QuerySnapshot<Map<String, dynamic>> selling = await FirebaseFirestore
+        .instance
+        .collection(COL_CHATROOMS)
+        .where(DOC_SELLERKEY, isEqualTo: myUserKey)
+        .get();
+
+    for (var documentSnapshot in buying.docs) {
+      chatrooms.add(ChatroomModel.fromQuerySnapshot(documentSnapshot));
+    }
+    for (var documentSnapshot in selling.docs) {
+      chatrooms.add(ChatroomModel.fromQuerySnapshot(documentSnapshot));
+    }
+
+    chatrooms.sort((a, b) => (a.lastMsgTime).compareTo(b.lastMsgTime));
+
+    return chatrooms;
+  }
 }

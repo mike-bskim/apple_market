@@ -126,11 +126,12 @@ class _HomeScreenState extends State<HomeScreen> {
         body: IndexedStack(
           index: _bottomSelectedIndex,
           children: <Widget>[
-            const ItemsPage(),
-            (context.read<UserNotifier>().userModel == null) ? Container() : MapPage(_userModel),
+            ItemsPage(userKey: _userModel.userKey,),
+            // (context.read<UserNotifier>().userModel == null) ? Container() : MapPage(_userModel),
+            MapPage(_userModel),
             const ChatListPage(),
             Container(
-              color: Colors.accents[3],
+              color: Colors.accents[9],
             ),
           ],
         ));

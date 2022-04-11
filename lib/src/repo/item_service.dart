@@ -7,15 +7,19 @@ import 'package:latlng/latlng.dart';
 
 class ItemService {
   static final ItemService _itemService = ItemService._internal();
+
   factory ItemService() => _itemService;
+
   ItemService._internal();
 
-  Future createNewItem(ItemModel itemModel, String itemKey, String userKey) async {
+  Future createNewItem(
+      ItemModel itemModel, String itemKey, String userKey) async {
     DocumentReference<Map<String, dynamic>> itemDocRef =
         FirebaseFirestore.instance.collection(COL_ITEMS).doc(itemKey);
     final DocumentSnapshot documentSnapshot = await itemDocRef.get();
 
-    DocumentReference<Map<String, dynamic>> userItemDocRef = FirebaseFirestore.instance
+    DocumentReference<Map<String, dynamic>> userItemDocRef = FirebaseFirestore
+        .instance
         .collection(COL_USERS)
         .doc(userKey)
         .collection(COL_USER_ITEMS)
@@ -34,21 +38,28 @@ class ItemService {
     if (itemKey[0] == ':') {
       String orgItemKey = itemKey;
       itemKey = itemKey.substring(1);
-      logger.d('[${orgItemKey.substring(0, 10)}...], ==>> [${itemKey.substring(0, 9)}...]');
+      logger.d(
+          '[${orgItemKey.substring(0, 10)}...], ==>> [${itemKey.substring(0, 9)}...]');
     }
     DocumentReference<Map<String, dynamic>> docRef =
         FirebaseFirestore.instance.collection(COL_ITEMS).doc(itemKey);
-    final DocumentSnapshot<Map<String, dynamic>> documentSnapshot = await docRef.get();
+    final DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+        await docRef.get();
 
     ItemModel itemModel = ItemModel.fromSnapshot(documentSnapshot);
 
     return itemModel;
   }
 
-  Future<List<ItemModel>> getItems() async {
+  Future<List<ItemModel>> getItems(String userKey) async {
+    logger.d('userKey['+userKey.toString()+']');
     CollectionReference<Map<String, dynamic>> collectionReference =
         FirebaseFirestore.instance.collection(COL_ITEMS);
-    QuerySnapshot<Map<String, dynamic>> snapshots = await collectionReference.get();
+    // QuerySnapshot<Map<String, dynamic>> snapshots = await collectionReference.get();
+    QuerySnapshot<Map<String, dynamic>> snapshots = await collectionReference
+        .where(DOC_USERKEY, isNotEqualTo: userKey)
+        .get();
+
     List<ItemModel> items = [];
 
     for (var snapshot in snapshots.docs) {
@@ -59,10 +70,15 @@ class ItemService {
     return items;
   }
 
-  Future<List<ItemModel>> getUserItems(String userKey, {String? itemKey}) async {
+  Future<List<ItemModel>> getUserItems(String userKey,
+      {String? itemKey}) async {
     CollectionReference<Map<String, dynamic>> collectionReference =
-        FirebaseFirestore.instance.collection(COL_USERS).doc(userKey).collection(COL_USER_ITEMS);
-    QuerySnapshot<Map<String, dynamic>> snapshots = await collectionReference.get();
+        FirebaseFirestore.instance
+            .collection(COL_USERS)
+            .doc(userKey)
+            .collection(COL_USER_ITEMS);
+    QuerySnapshot<Map<String, dynamic>> snapshots =
+        await collectionReference.get();
     List<ItemModel> items = [];
 
     for (var snapshot in snapshots.docs) {

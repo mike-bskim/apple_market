@@ -8,11 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
 
 class ChatListPage extends StatelessWidget {
-  const ChatListPage({Key? key}) : super(key: key);
+  final String userKey;
+  const ChatListPage({Key? key, required this.userKey}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String userKey = context.read<UserNotifier>().userModel!.userKey;
+    // String userKey = context.read<UserNotifier>().userModel!.userKey;
 
 
     return FutureBuilder<List<ChatroomModel>>(

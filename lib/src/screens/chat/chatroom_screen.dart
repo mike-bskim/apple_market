@@ -1,7 +1,7 @@
 import 'package:apple_market/src/model/chat_model.dart';
 import 'package:apple_market/src/model/chatroom_model.dart';
 import 'package:apple_market/src/model/user_model.dart';
-import 'package:apple_market/src/repo/chat_service.dart';
+// import 'package:apple_market/src/repo/chat_service.dart';
 import 'package:apple_market/src/screens/chat/chat.dart';
 import 'package:apple_market/src/states/chat_notifier.dart';
 import 'package:apple_market/src/states/user_notifier.dart';

@@ -3,6 +3,7 @@ import 'package:apple_market/src/router/locations.dart';
 import 'package:apple_market/src/screens/chat/chat_list_page.dart';
 import 'package:apple_market/src/screens/home/items_page.dart';
 import 'package:apple_market/src/screens/home/map_page.dart';
+// import 'package:apple_market/src/screens/search/search_screen.dart';
 import 'package:apple_market/src/states/user_notifier.dart';
 import 'package:apple_market/src/utils/logger.dart';
 import 'package:apple_market/src/widgets/expandable_fab.dart';
@@ -83,7 +84,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   context.beamToNamed('/');
                 },
                 icon: const Icon(Icons.logout)),
-            IconButton(onPressed: () {}, icon: const Icon(CupertinoIcons.search)),
+            IconButton(onPressed: () {
+              // const SearchScreen();
+              context.beamToNamed('/$LOCATION_SEARCH');
+            }, icon: const Icon(CupertinoIcons.search)),
             IconButton(onPressed: () {}, icon: const Icon(CupertinoIcons.text_justify)),
           ],
         ),

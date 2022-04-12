@@ -1,11 +1,11 @@
 import 'package:apple_market/src/model/chatroom_model.dart';
 import 'package:apple_market/src/repo/chat_service.dart';
-import 'package:apple_market/src/states/user_notifier.dart';
+// import 'package:apple_market/src/states/user_notifier.dart';
 import 'package:apple_market/src/utils/logger.dart';
 import 'package:beamer/src/beamer.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/src/provider.dart';
+// import 'package:provider/src/provider.dart';
 
 class ChatListPage extends StatelessWidget {
   final String userKey;
@@ -25,7 +25,7 @@ class ChatListPage extends StatelessWidget {
             body: ListView.separated(
                 itemBuilder: (context, index) {
                   ChatroomModel chatroomModel = snapshot.data![index];
-                  bool iamBuyer = chatroomModel.buyerKey == userKey;
+                  // bool iamBuyer = chatroomModel.buyerKey == userKey;
 
                   List _address = chatroomModel.itemAddress.split(' ');
                   String _detail = _address[_address.length - 1];

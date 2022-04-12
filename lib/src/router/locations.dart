@@ -3,6 +3,7 @@ import 'package:apple_market/src/screens/home_screen.dart';
 import 'package:apple_market/src/screens/input/category_input_screen.dart';
 import 'package:apple_market/src/screens/input_screen.dart';
 import 'package:apple_market/src/screens/item_detail_screen.dart';
+import 'package:apple_market/src/screens/search/search_screen.dart';
 import 'package:apple_market/src/screens/start_screen.dart';
 import 'package:apple_market/src/states/category_notifier.dart';
 import 'package:apple_market/src/states/select_image_notifier.dart';
@@ -12,22 +13,27 @@ import 'package:provider/provider.dart';
 
 // ignore_for_file: constant_identifier_names
 const LOCATION_LOGIN = 'login';
+
 const LOCATION_HOME = 'home';
 const LOCATION_INPUT = 'input';
-const LOCATION_CATEGORY_INPUT = 'category_input';
 const LOCATION_ITEM = 'item';
+const LOCATION_SEARCH = 'search';
 const LOCATION_ITEM_ID = 'item_id';
 const LOCATION_CHATROOM_ID = 'chatroom_id';
+const LOCATION_CATEGORY_INPUT = 'category_input';
 
 class HomeLocation extends BeamLocation<BeamState> {
   @override
   List<BeamPage> buildPages(BuildContext context, BeamState state) {
     // TODO: implement buildPages
-    return [const BeamPage(key: ValueKey(LOCATION_HOME), child: HomeScreen())];
+    return [const BeamPage(key: ValueKey(LOCATION_HOME), child: HomeScreen()),
+      if (state.pathPatternSegments.contains(LOCATION_SEARCH))
+      const BeamPage(key: ValueKey(LOCATION_SEARCH), child: SearchScreen()),
+    ];
   }
 
   @override
-  List<Pattern> get pathPatterns => ['/'];
+  List<Pattern> get pathPatterns => ['/', '/$LOCATION_SEARCH'];
 
 // @override
 // // TODO: implement pathPatterns

@@ -1,8 +1,11 @@
+import 'package:algolia/algolia.dart';
+import 'package:apple_market/src/app.dart';
 import 'package:apple_market/src/model/user_model.dart';
 import 'package:apple_market/src/router/locations.dart';
 import 'package:apple_market/src/screens/chat/chat_list_page.dart';
 import 'package:apple_market/src/screens/home/items_page.dart';
 import 'package:apple_market/src/screens/home/map_page.dart';
+
 // import 'package:apple_market/src/screens/search/search_screen.dart';
 import 'package:apple_market/src/states/user_notifier.dart';
 import 'package:apple_market/src/utils/logger.dart';
@@ -27,6 +30,23 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     logger.d('HomeScreen >> build');
 
+    ///
+    /// Perform Query
+    ///
+    AlgoliaQuery query = algolia.instance.index('items').query('원효로');
+
+    // Perform multiple facetFilters
+    // query = query.facetFilter('status:published');
+    // query = query.facetFilter('isDelete:false');
+
+    // Get Result/Objects, AlgoliaQuerySnapshot snap = await
+    query.getObjects().then((value) => {
+          debugPrint(value.toString()),
+        });
+    ///
+    /// Perform Query
+    ///
+
     UserModel _userModel = context.read<UserNotifier>().userModel!;
     //[서울특별시, 용산구, 원효로71길, 11, (원효로2가)]
     //[서울특별시, 중구, 태평로1가, 31]
@@ -37,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (_detail.contains('(') && _detail.contains(')')) {
       _location = _detail.replaceAll('(', '').replaceAll(')', '');
     } else {
-      _location = _address[0];// 2
+      _location = _address[0]; // 2
     }
 
     return Scaffold(
@@ -84,11 +104,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   context.beamToNamed('/');
                 },
                 icon: const Icon(Icons.logout)),
-            IconButton(onPressed: () {
-              // const SearchScreen();
-              context.beamToNamed('/$LOCATION_SEARCH');
-            }, icon: const Icon(CupertinoIcons.search)),
-            IconButton(onPressed: () {}, icon: const Icon(CupertinoIcons.text_justify)),
+            IconButton(
+                onPressed: () {
+                  // const SearchScreen();
+                  context.beamToNamed('/$LOCATION_SEARCH');
+                },
+                icon: const Icon(CupertinoIcons.search)),
+            IconButton(
+                onPressed: () {},
+                icon: const Icon(CupertinoIcons.text_justify)),
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(

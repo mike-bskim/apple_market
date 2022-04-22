@@ -55,6 +55,7 @@ dependencies:
   smooth_page_indicator: ^1.0.0+2
   map: ^1.0.0
   latlng: ^0.1.0
+  algolia: ^1.0.5
 
 
 dev_dependencies:

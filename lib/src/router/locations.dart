@@ -24,7 +24,7 @@ const LOCATION_CATEGORY_INPUT = 'category_input';
 
 class HomeLocation extends BeamLocation<BeamState> {
   @override
-  List<BeamPage> buildPages(BuildContext context, BeamState state) {
+  List<BeamPage> buildPages(BuildContext context, BeamState state) {//RouteInformationSerializable
     // TODO: implement buildPages
     return [const BeamPage(key: ValueKey(LOCATION_HOME), child: HomeScreen()),
       if (state.pathPatternSegments.contains(LOCATION_SEARCH))

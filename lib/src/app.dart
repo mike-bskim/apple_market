@@ -1,9 +1,15 @@
+import 'package:algolia/algolia.dart';
 import 'package:apple_market/src/screens/start_screen.dart';
 import 'package:apple_market/src/router/locations.dart';
 import 'package:apple_market/src/states/user_notifier.dart';
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+  const Algolia algolia = Algolia.init(
+    applicationId: 'DRZS6ADMLA',
+    apiKey: '68700b4024154b40f635670feb4e253c',
+  );
 
 final _routerDelegate = BeamerDelegate(
   guards: [
